@@ -1,0 +1,7 @@
+parse:
+  additional_commands:
+    idf_component_register:
+      kwargs:
+        SRCS: '*'
+        PRIV_REQUIRES: '*'
+        INCLUDE_DIRS: '*'

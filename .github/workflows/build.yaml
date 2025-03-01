@@ -1,0 +1,25 @@
+name: Build
+on: [push]
+permissions:
+  contents: read
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  glove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: platformio build
+        run: cd glove && pio run
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: glove
+          path: glove/.pio/build/esp32dev/*.elf
