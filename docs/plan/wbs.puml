@@ -7,20 +7,20 @@ skinparam dpi 300
 *** Power Supply
 *** PCB
 ** Mechanical
-*** Sensors
-*** Actuators
-*** Joints
+*** Sensor
+*** Motor
 *** Glove
 ** Software
-*** Embedded
-**** Control loop
-**** Networking
+*** Tremor suppression algorithm\n<size:8>e.g. PID Control, Control loop</size>
 *** Database
 **** Entity-Relationship Diagram
 **** SQL Queries
-**** Server Setup
 *** Web app
 **** Backend
 **** Frontend
+*** Networking
+**** Server Setup
+**** Encryption\n<size:8>e.g. HTTPS</size>
+**** WiFi on ESP32
 
 @endwbs
