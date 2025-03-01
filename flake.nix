@@ -24,6 +24,8 @@
             pkgs.yamlfmt
           ];
 
+          env.ESPBAUD = 921600;
+
         };
       };
     };
