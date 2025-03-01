@@ -1,0 +1,5 @@
+furo
+sphinx
+sphinx-copybutton
+sphinxcontrib-katex
+sphinxcontrib-plantuml

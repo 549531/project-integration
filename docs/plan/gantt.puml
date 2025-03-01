@@ -1,0 +1,117 @@
+@startgantt
+
+skinparam dpi 300
+
+saturday are closed
+sunday are closed
+2025-02-17 to 2025-02-23 are closed
+2025-04-14 to 2025-04-20 are closed
+
+Project starts the 2025-02-03
+projectscale weekly zoom 2
+'title Project Integration
+
+-- Deadlines --
+
+[   EIE Practicals] as [eie] happens 2025-02-14
+[   Project Plan] as [dplan] happens 2025-02-14
+[   User Requirements] as [ureq] happens 2025-02-28
+[   System Requirements] as [sreq] happens 2025-03-07
+[   Functional Design] as [dfunc] happens 2025-03-21
+[   PCB] as [dpcb] happens 2025-03-21
+[   ACS Practicals] as [acs] happens 2025-03-28
+[   Assessment Practicals] as [pract] happens 2025-04-04
+[   Technical Design] as [dtech] happens 2025-04-11
+[   Demo] as [demo] happens 2025-06-06
+
+[ureq]  displays on same row as [eie]
+[sreq]  displays on same row as [dplan]
+[dfunc] displays on same row as [ureq]
+[acs]   displays on same row as [sreq]
+[pract] displays on same row as [dfunc]
+[dtech] displays on same row as [acs]
+[demo]  displays on same row as [pract]
+
+-- Q3: Planning --
+
+[Project plan] as [pplan] requires 2 weeks and ends at [dplan]'s end
+
+[Gather user requirements] as [gureq] ends at [ureq]'s end
+[pplan] -> [gureq]
+
+then [Gather system requirements] as [gsreq] ends at [sreq]'s end
+
+[Explore sensors] as [esen] requires 4 days
+[Explore actuators] as [eact] requires 4 days
+[pplan] -> [esen]
+[pplan] -> [eact]
+
+[Morphological analysis of hardware] as [hmor] requires 1 day
+[esen] -> [hmor]
+[eact] -> [hmor]
+
+[PCB design] as [pcb] ends at [dpcb]'s end
+[hmor] -> [pcb]
+
+[Explore joints] as [ejoint] requires 1 week
+[pplan] -> [ejoint]
+
+[Morphological analysis of joints] as [jmor] requires 1 day
+[hmor] -> [jmor]
+[ejoint] -> [jmor]
+
+[Mechanical design] as [dmech] ends at [dtech]'s end
+[hmor] -> [dmech]
+[jmor] -> [dmech]
+
+[Order parts] as [parts] requires 1 day
+[jmor] -> [parts]
+
+[Receive parts] as [recv] requires 1 day
+[recv] starts 2025-03-24
+[recv] starts 14 days after [parts]'s end
+
+[Test sensors using ESP32] as [tsen] requires 4 days
+[Test actuators using ESP32] as [tact] requires 4 days
+[recv] -> [tsen]
+[recv] -> [tact]
+
+[Explore control loops] as [eloop] requires 1 week
+[pplan] -> [eloop]
+
+[Control loop design] as [dloop] ends at [dtech]'s end
+[hmor] -> [dloop]
+[eloop] -> [dloop]
+
+[Database design] as [ddb] requires 2 weeks
+[eloop] -> [ddb]
+
+[Webapp design] as [dweb] ends at [dtech]'s end
+[ddb] -> [dweb]
+
+-- Q4: Implementation --
+
+[Construct the glove] as [const] requires 6 weeks
+[dmech] -> [const]
+
+[Implement control loop] as [iloop] requires 6 weeks
+[dmech] -> [iloop]
+[dloop] -> [iloop]
+[tsen] -> [iloop]
+[tact] -> [iloop]
+
+[Setup database] as [idb] requires 1 week
+[idb] starts 2025-04-21
+[ddb] -> [idb]
+
+[Implement webapp] as [iweb] requires 5 weeks
+[dweb] -> [iweb]
+[idb] -> [iweb]
+
+[Prepare for the demo] as [pdemo] ends at [demo]'s end
+[const] -> [pdemo]
+[iloop] -> [pdemo]
+[iweb] -> [pdemo]
+
+@endgantt
+
