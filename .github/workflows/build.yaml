@@ -18,3 +18,4 @@ jobs:
         with:
           esp_idf_version: release-v5.3
           target: esp32
+          path: glove
