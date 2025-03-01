@@ -1,0 +1,26 @@
+@startwbs
+
+skinparam dpi 300
+
+* Project Integration
+** Electrical
+*** Power Supply
+*** PCB
+** Mechanical
+*** Sensors
+*** Actuators
+*** Joints
+*** Glove
+** Software
+*** Embedded
+**** Control loop
+**** Networking
+*** Database
+**** Entity-Relationship Diagram
+**** SQL Queries
+**** Server Setup
+*** Web app
+**** Backend
+**** Frontend
+
+@endwbs

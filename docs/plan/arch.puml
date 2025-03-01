@@ -1,0 +1,30 @@
+@startuml
+
+skinparam dpi 300
+
+!include <C4/C4_Container>
+
+LAYOUT_WITH_LEGEND()
+left to right direction
+
+'title Project Integration
+
+Person(patient, "Patient", "Suffers from tremor")
+Person(doctor, "Doctor", "Specializes in treating tremor")
+
+System_Boundary(system, "Tremor Relief System", "Suppresses tremor & shows statistics") {
+	Container(glove, "Glove", "C++ on ESP32", "Suppresses tremor and collects statistics")
+	Container(backend, "Statistics Storage", "Python 3", "Provides a domain-specific API to access the database")
+	Container(frontend, "Statistics Visualization", "Svelte 5 with Apache ECharts", "Provides a user interface for the doctor to access statistics")
+	ContainerDb(database, "Database", "PostgreSQL 15", "Stores statistics")
+
+	Rel(glove, backend, "Streams statistics to", "MQTT over WiFi")
+	Rel(frontend, backend, "Retrieves statistics from", "JSON over HTTPS")
+	Rel_Neighbor(backend, database, "Persists statistics in", "SQL")
+}
+
+Rel(patient, glove, "Wears to suppress tremor")
+Rel(doctor, frontend, "Retrieves statistics from", "HTTPS")
+Rel_Back_Neighbor(patient, doctor, "Treats")
+
+@enduml

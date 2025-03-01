@@ -1,0 +1,26 @@
+@startmindmap
+
+skinparam dpi 300
+
+* Objectives
+** Suppress tremor
+*** Requirements
+**** Distinguish tremor from voluntary movement
+**** Apply physical force to the hand
+*** Boundaries
+**** Only suppresses tremor in one joint of the wrist
+**** Reduces tremor amplitude by at least 60%
+**** Do not limit voluntary movement
+**** Keep the hand reasonably mobile
+***** The user should be able to eat soup and draw
+** Show feedback to the user
+*** Requirements
+**** Show charts
+***** Store data points for the charts
+***** Collect data points for the charts
+**** Keep the data available 24/7
+*** Boundaries
+**** Store the data for a limited time (a month?)
+**** Collect 20 data points per second
+
+@endmindmap

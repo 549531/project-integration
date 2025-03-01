@@ -13,16 +13,30 @@
 
         devShells.default = pkgs.mkShell {
 
-          packages = [
-            inputs'.esp-idf.packages.esp-idf-esp32
-            pkgs.clang-tools
-            pkgs.cmake-format
-            pkgs.nixpkgs-fmt
-            pkgs.shfmt
-            pkgs.taplo
-            pkgs.treefmt
-            pkgs.yamlfmt
-          ];
+          packages =
+            let
+              py = pkgs.python3.withPackages (ps: [
+                ps.furo
+                ps.sphinx
+                ps.sphinx-autobuild
+                ps.sphinxcontrib-katex
+                ps.sphinxcontrib-plantuml
+                ps.sphinx-copybutton
+              ]);
+            in
+            [
+              inputs'.esp-idf.packages.esp-idf-esp32
+              pkgs.clang-tools
+              pkgs.cmake-format
+              pkgs.nixpkgs-fmt
+              pkgs.nodejs
+              pkgs.plantuml
+              pkgs.shfmt
+              pkgs.taplo
+              pkgs.treefmt
+              pkgs.yamlfmt
+              py
+            ];
 
           env.ESPBAUD = 921600;
 
