@@ -3,7 +3,7 @@
 
 static char const *TAG = "main";
 
-void app_main(void) {
+extern "C" void app_main() {
 	ESP_LOGI(TAG, "Hello world");
 
 	for (;;) {
