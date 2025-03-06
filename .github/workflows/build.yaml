@@ -1,12 +1,29 @@
 name: Build
-on: [push]
+on:
+  push: {branch: main}
+  pull_request: {}
 permissions:
+  actions: write
   contents: read
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
+  id-token: write
+  pages: write
 jobs:
+  skip_check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+      paths_result: ${{ steps.skip_check.outputs.paths_result }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          paths_filter: |
+            api:   {paths: ['api/**']}
+            docs:  {paths: ['docs/**']}
+            glove: {paths: ['glove/**']}
   glove:
+    needs: skip_check
+    if: needs.skip_check.outputs.should_skip != 'true' && !fromJSON(needs.skip_check.outputs.paths_result).glove.should_skip
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -23,3 +40,44 @@ jobs:
         with:
           name: glove
           path: glove/.pio/build/esp32dev/*.elf
+  docs:
+    needs: skip_check
+    if: needs.skip_check.outputs.should_skip != 'true' && !fromJSON(needs.skip_check.outputs.paths_result).docs.should_skip
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install latest PlantUML
+        run: |
+          sudo apt install -y default-jre graphviz
+          sudo curl -fSLo /opt/plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+          sudo tee /usr/bin/plantuml <<'EOF'
+          #!/bin/sh
+          java -jar /opt/plantuml.jar "$@"
+          EOF
+          sudo chmod 755 /usr/bin/plantuml
+      - name: Install sphinx dependencies
+        run: |
+          pip install -r docs/requirements.txt
+      - name: Sphinx build
+        run: |
+          sphinx-build docs _build
+      - name: Upload the artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build/
+  docs_deploy:
+    needs: docs
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.upload.output.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: actions/deploy-pages@v4
