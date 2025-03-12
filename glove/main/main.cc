@@ -1,5 +1,4 @@
-#include <esp_log.h>
-#include <freertos/FreeRTOS.h>
+#include <Arduino.h>
 
 static char const *TAG = "main";
 
