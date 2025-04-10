@@ -1,0 +1,61 @@
+#!/bin/sh -eu
+
+if [ $# -lt 2 -o ! -f "${1-}" ]; then
+	cat <<-EOF
+		Usage: $0 INFILE OUTFILE WIDTH HEIGHT FRAME_COUNT
+
+		Example: $0 heart.gif heart.h 32 32 30
+			will convert heart.gif to heart.h, resized to 32x32 and
+			limited to first 30 frames.
+	EOF
+	exit
+fi
+
+name=$(basename "$1")
+name=${name%.*}
+w=${3-32}
+h=${4-$w}
+f="$name.raw"
+
+vf="scale=$w:$h,setsar=1:1"
+
+if [ -n "${5-}" ]; then
+	vf="select='lte(n,$5)',$vf"
+fi
+
+ffmpeg -loglevel 24 \
+	-i "$1" \
+	-f rawvideo -pix_fmt rgb565le \
+	-vf "$vf" \
+	"$f"
+
+cat >"$2" <<-EOF
+	#if defined(__AVR__)
+	    #include <avr/pgmspace.h>
+	#elif defined(__PIC32MX__)
+	    #define PROGMEM
+	#elif defined(__arm__)
+	    #define PROGMEM
+	#endif
+
+EOF
+
+len=$(echo "$(wc -c <"$f") / 2" | bc)
+
+cat >>"$2" <<-EOF
+	[[maybe_unused]] static size_t ${name}_len = $len;
+	[[maybe_unused]] static size_t ${name}_width = $w;
+	[[maybe_unused]] static size_t ${name}_height = $h;
+	[[maybe_unused]] static size_t ${name}_frames = $(echo "$len/$w/$h" | bc);
+	static const unsigned short $name[$len] PROGMEM = {
+EOF
+
+xxd -p -c 32 <"$f" >>"$2" | sed \
+	-e 'y/[a-z]/[A-Z]/' \
+	-e 's/..../0x&, /g' \
+	-e 's/^/  /' \
+	-e 's/ $//'
+
+echo "};" >>"$2"
+
+rm "$f"
