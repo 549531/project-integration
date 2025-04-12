@@ -1,0 +1,8 @@
+﻿---
+BasedOnStyle: 'Google'
+IndentCaseLabels: 'no'
+IndentWidth: '8'
+InsertNewlineAtEOF: 'true'
+PointerAlignment: 'Right'
+UseTab: 'ForContinuationAndIndentation'
+...
