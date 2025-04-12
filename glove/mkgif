@@ -31,11 +31,11 @@ ffmpeg -loglevel 24 \
 
 cat >"$2" <<-EOF
 	#if defined(__AVR__)
-	    #include <avr/pgmspace.h>
+	#include <avr/pgmspace.h>
 	#elif defined(__PIC32MX__)
-	    #define PROGMEM
+	#define PROGMEM
 	#elif defined(__arm__)
-	    #define PROGMEM
+	#define PROGMEM
 	#endif
 
 EOF
@@ -50,10 +50,10 @@ cat >>"$2" <<-EOF
 	static const unsigned short $name[$len] PROGMEM = {
 EOF
 
-xxd -p -c 32 <"$f" | sed >>"$2" \
+xxd -p -c 18 <"$f" | sed >>"$2" \
 	-e 'y/[a-z]/[A-Z]/' \
 	-e 's/..../0x&, /g' \
-	-e 's/^/  /' \
+	-e 's/^/    /' \
 	-e 's/ $//'
 
 echo "};" >>"$2"
