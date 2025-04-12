@@ -50,7 +50,7 @@ cat >>"$2" <<-EOF
 	static const unsigned short $name[$len] PROGMEM = {
 EOF
 
-xxd -p -c 32 <"$f" >>"$2" | sed \
+xxd -p -c 32 <"$f" | sed >>"$2" \
 	-e 'y/[a-z]/[A-Z]/' \
 	-e 's/..../0x&, /g' \
 	-e 's/^/  /' \
