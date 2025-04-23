@@ -8,7 +8,7 @@ uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
 static uint32_t my_lv_tick_get() { return millis(); }
 
-static void my_chart_update(lv_timer_t *t) {
+static void chart_update(lv_timer_t *t) {
 	auto chart = (lv_obj_t *)lv_timer_get_user_data(t);
 	auto series = lv_chart_get_series_next(chart, nullptr);
 	lv_chart_set_next_value(chart, series, (int32_t)lv_rand(0, 100));
@@ -45,7 +45,7 @@ extern "C" void app_main() {
 	lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED),
 			    LV_CHART_AXIS_PRIMARY_Y);
 
-	lv_timer_create(my_chart_update, 100, chart);
+	lv_timer_create(chart_update, 100, chart);
 
 	for (;;) {
 		ESP_LOGI(TAG, "tick");
