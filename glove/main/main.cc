@@ -71,7 +71,11 @@ static void btn_click() {
 }
 
 extern "C" void app_main() {
+	ESP_LOGI(TAG, "boot done");
+
 	buttons_init();
+	ESP_LOGI(TAG, "buttons config done");
+
 	lv_init();
 	lv_tick_set_cb(my_lv_tick_get);
 
@@ -102,6 +106,8 @@ extern "C" void app_main() {
 			    LV_CHART_AXIS_PRIMARY_Y);
 
 	lv_timer_create(chart_update, 100, chart);
+
+	ESP_LOGI(TAG, "lvgl config done");
 
 	for (;;) {
 		ESP_LOGI(TAG, "tick");
