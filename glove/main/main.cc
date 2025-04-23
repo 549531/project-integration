@@ -44,6 +44,17 @@ static button_t buttons[]{
     {GPIO_NUM_35, btn_click},
 };
 
+static void buttons_init() {
+	gpio_config_t buttons_gpio_config{
+	    .mode = GPIO_MODE_INPUT,
+	    .pull_up_en = GPIO_PULLUP_ENABLE,
+	};
+	for (auto &btn : buttons) {
+		buttons_gpio_config.pin_bit_mask |= 1llu << btn.m_pin;
+	}
+	ESP_ERROR_CHECK(gpio_config(&buttons_gpio_config));
+}
+
 static uint32_t my_lv_tick_get() { return millis(); }
 
 static void chart_update(lv_timer_t *t) {
@@ -60,6 +71,7 @@ static void btn_click() {
 }
 
 extern "C" void app_main() {
+	buttons_init();
 	lv_init();
 	lv_tick_set_cb(my_lv_tick_get);
 
