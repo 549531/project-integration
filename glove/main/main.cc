@@ -4,9 +4,9 @@
 
 static char const *TAG = "main";
 
-uint32_t my_lv_tick_get() { return millis(); }
-
 uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
+
+static uint32_t my_lv_tick_get() { return millis(); }
 
 static void my_chart_update(lv_timer_t *t) {
 	auto chart = (lv_obj_t *)lv_timer_get_user_data(t);
