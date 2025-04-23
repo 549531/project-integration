@@ -71,7 +71,10 @@ static void buttons_update(lv_timer_t *t) {
 }
 
 static void btn_click() {
-	ESP_LOGI(TAG, "button click");
+	for (;;) {
+		ESP_LOGI(TAG, "button click");
+		vTaskDelay(pdMS_TO_TICKS(100));
+	}
 	auto t = lv_timer_get_next(nullptr);
 	lv_timer_delete(t);
 }
