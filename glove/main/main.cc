@@ -37,6 +37,8 @@ struct button_t {
 
 uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
+static void btn_click();
+
 static uint32_t my_lv_tick_get() { return millis(); }
 
 static void chart_update(lv_timer_t *t) {
@@ -44,6 +46,12 @@ static void chart_update(lv_timer_t *t) {
 	auto series = lv_chart_get_series_next(chart, nullptr);
 	lv_chart_set_next_value(chart, series, (int32_t)lv_rand(0, 100));
 	lv_chart_refresh(chart);
+}
+
+static void btn_click() {
+	ESP_LOGI(TAG, "button click");
+	auto t = lv_timer_get_next(nullptr);
+	lv_timer_delete(t);
 }
 
 extern "C" void app_main() {
