@@ -39,6 +39,11 @@ uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
 static void btn_click();
 
+static button_t buttons[]{
+    {GPIO_NUM_0, btn_click},
+    {GPIO_NUM_35, btn_click},
+};
+
 static uint32_t my_lv_tick_get() { return millis(); }
 
 static void chart_update(lv_timer_t *t) {
