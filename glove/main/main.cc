@@ -64,6 +64,12 @@ static void chart_update(lv_timer_t *t) {
 	lv_chart_refresh(chart);
 }
 
+static void buttons_update(lv_timer_t *t) {
+	for (auto &btn : buttons) {
+		btn.update();
+	}
+}
+
 static void btn_click() {
 	ESP_LOGI(TAG, "button click");
 	auto t = lv_timer_get_next(nullptr);
@@ -106,6 +112,7 @@ extern "C" void app_main() {
 			    LV_CHART_AXIS_PRIMARY_Y);
 
 	lv_timer_create(chart_update, 100, chart);
+	lv_timer_create(buttons_update, 33, nullptr);
 
 	ESP_LOGI(TAG, "lvgl config done");
 
