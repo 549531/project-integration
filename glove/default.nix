@@ -1,6 +1,6 @@
 {
   perSystem = { pkgs, ... }: {
-    devshells.default = {
+    make-shells.default = {
       packages = [
         pkgs.clang-tools
         pkgs.cmake-format
@@ -8,9 +8,7 @@
         pkgs.platformio
       ];
 
-      env = [
-        { name = "ESPBAUD"; value = 921600; }
-      ];
+      env.ESPBAUD = 921600;
     };
 
     treefmt.programs = {

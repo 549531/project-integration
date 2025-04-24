@@ -1,8 +1,7 @@
 {
   inputs = {
-    devshell.inputs.nixpkgs.follows = "nixpkgs";
-    devshell.url = "github:numtide/devshell";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    make-shell.url = "github:nicknovitski/make-shell";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -15,12 +14,12 @@
       imports = [
         ./docs
         ./glove
-        inputs.devshell.flakeModule
+        inputs.make-shell.flakeModules.default
         inputs.treefmt-nix.flakeModule
       ];
 
       perSystem = { config, pkgs, ... }: {
-        devshells.default = {
+        make-shells.default = {
           packages = [
             config.treefmt.build.wrapper
           ];

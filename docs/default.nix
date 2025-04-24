@@ -1,6 +1,6 @@
 {
   perSystem = { pkgs, ... }: {
-    devshells.default = {
+    make-shells.default = {
       packages =
         let
           py = pkgs.python3.withPackages (ps: [
