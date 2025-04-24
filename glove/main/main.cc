@@ -129,7 +129,6 @@ extern "C" void app_main() {
 	ESP_LOGI(TAG, "lvgl config done");
 
 	for (;;) {
-		ESP_LOGI(TAG, "tick");
 		uint32_t delay = lv_timer_handler();
 		vTaskDelay(pdMS_TO_TICKS(delay));
 	}
