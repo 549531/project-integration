@@ -39,11 +39,12 @@ struct button_t {
 
 uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
-static void btn_click(void *);
+static void btn1_click(void *);
+static void btn2_click(void *);
 
 static button_t buttons[]{
-    {GPIO_NUM_0, btn_click},
-    {GPIO_NUM_35, btn_click},
+    {GPIO_NUM_0, btn1_click},
+    {GPIO_NUM_35, btn2_click},
 };
 
 static void buttons_init() {
@@ -67,18 +68,24 @@ static void chart_update(lv_timer_t *t) {
 }
 
 static void buttons_update(lv_timer_t *t) {
+	void *arg = lv_timer_get_user_data(t);
 	for (auto &btn : buttons) {
-		btn.update(nullptr);
+		btn.update(arg);
 	}
 }
 
-static void btn_click(void *arg) {
-	for (;;) {
-		ESP_LOGI(TAG, "button click");
-		vTaskDelay(pdMS_TO_TICKS(100));
-	}
-	auto t = lv_timer_get_next(nullptr);
-	lv_timer_delete(t);
+static void btn1_click(void *arg) {
+	auto chart = (lv_obj_t *)arg;
+	auto series = lv_chart_get_series_next(chart, nullptr);
+	lv_chart_set_series_color(chart, series,
+				  lv_palette_main(LV_PALETTE_BLUE));
+}
+
+static void btn2_click(void *arg) {
+	auto chart = (lv_obj_t *)arg;
+	auto series = lv_chart_get_series_next(chart, nullptr);
+	lv_chart_set_series_color(chart, series,
+				  lv_palette_main(LV_PALETTE_GREEN));
 }
 
 extern "C" void app_main() {
@@ -117,7 +124,7 @@ extern "C" void app_main() {
 			    LV_CHART_AXIS_PRIMARY_Y);
 
 	lv_timer_create(chart_update, 100, chart);
-	lv_timer_create(buttons_update, 33, nullptr);
+	lv_timer_create(buttons_update, 33, chart);
 
 	ESP_LOGI(TAG, "lvgl config done");
 
