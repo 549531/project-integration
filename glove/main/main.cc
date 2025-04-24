@@ -5,7 +5,7 @@
 static char const *TAG = "main";
 
 struct button_t {
-	using callback_t = void (*)();
+	using callback_t = void (*)(void *);
 
 	gpio_num_t m_pin;
 	callback_t m_click_cb;
@@ -19,7 +19,7 @@ struct button_t {
 	button_t(gpio_num_t pin, callback_t click_cb)
 	    : m_pin{pin}, m_click_cb{click_cb} {}
 
-	void update() {
+	void update(void *arg) {
 		bool now_value = !gpio_get_level(m_pin);
 		int64_t now = esp_timer_get_time();
 		if (now_value != m_last_value) {
@@ -31,7 +31,7 @@ struct button_t {
 			m_time = m_last_time;
 			if (m_value) {
 				assert(m_click_cb);
-				m_click_cb();
+				m_click_cb(arg);
 			}
 		}
 	}
@@ -39,7 +39,7 @@ struct button_t {
 
 uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
-static void btn_click();
+static void btn_click(void *);
 
 static button_t buttons[]{
     {GPIO_NUM_0, btn_click},
@@ -68,11 +68,11 @@ static void chart_update(lv_timer_t *t) {
 
 static void buttons_update(lv_timer_t *t) {
 	for (auto &btn : buttons) {
-		btn.update();
+		btn.update(nullptr);
 	}
 }
 
-static void btn_click() {
+static void btn_click(void *arg) {
 	for (;;) {
 		ESP_LOGI(TAG, "button click");
 		vTaskDelay(pdMS_TO_TICKS(100));
