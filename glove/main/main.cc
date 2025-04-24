@@ -5,8 +5,10 @@
 static char const *TAG = "main";
 
 struct button_t {
+	using callback_t = void (*)();
+
 	gpio_num_t m_pin;
-	void (*m_click_cb)();
+	callback_t m_click_cb;
 
 	bool m_value{};
 	int64_t m_time{};
@@ -14,7 +16,7 @@ struct button_t {
 	bool m_last_value{};
 	int64_t m_last_time{};
 
-	button_t(gpio_num_t pin, void (*click_cb)())
+	button_t(gpio_num_t pin, callback_t click_cb)
 	    : m_pin{pin}, m_click_cb{click_cb} {}
 
 	void update() {
