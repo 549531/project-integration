@@ -1,41 +1,42 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {ref, watchEffect} from 'vue'
 
 defineProps<{ msg: string }>()
 
-const count = ref(0)
+const legitIds = ['admin', 'user123', 'secretCode', 'testUser']
+
+const device_id = ref('')
+const isFocused = ref(false)
+const loginStatus = ref('')
+
+function checkLogin() {
+  if (legitIds.includes(device_id.value.trim())) {
+    loginStatus.value = 'success'
+    alert('hi, ' + device_id.value)
+  } else {
+    loginStatus.value = 'fail'
+    alert('NO, ' + device_id.value)
+  }
+}
+
+watchEffect(() => {
+  console.log(device_id.value);
+})
+
+
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <div class="flex items-center justify-center min-h-screen ">
+    <input
+        class="border border-black-300 rounded-full px-4 shadow block m-auto"
 
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
+        :placeholder="isFocused ? ' ':'login with device id'"
+        v-model="device_id"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+        @keydown.enter="checkLogin"
+        style="height: 50px; width: 450px;"
+    />
   </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Learn more about IDE Support for Vue in the
-    <a
-      href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support"
-      target="_blank"
-      >Vue Docs Scaling up Guide</a
-    >.
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
-
-<style scoped>
-.read-the-docs {
-  color: #888;
-}
-</style>
