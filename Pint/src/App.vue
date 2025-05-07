@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import LogPage from './components/logPage.vue'
 </script>
 
 <template>
-  <HelloWorld msg="Vite + Vue" />
+  <LogPage msg="Vite + Vue" />
 </template>
