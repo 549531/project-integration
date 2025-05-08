@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import LogPage from './components/logPage.vue'
+import HomePage from './components/HomePage.vue'
 </script>
 
 <template>
-  <LogPage msg="Vite + Vue" />
+  <HomePage />
 </template>
