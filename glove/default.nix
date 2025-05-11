@@ -3,8 +3,6 @@
     make-shells.default = {
       packages = [
         pkgs.clang-tools
-        pkgs.cmake-format
-        pkgs.nixpkgs-fmt
         pkgs.platformio
       ];
 
