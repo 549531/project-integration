@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: glove
-          path: glove/.pio/build/esp32dev/*.elf
+          path: glove/.pio/build/*/*.elf
   docs:
     needs: skip_check
     if: needs.skip_check.outputs.should_skip != 'true' && !fromJSON(needs.skip_check.outputs.paths_result).docs.should_skip
