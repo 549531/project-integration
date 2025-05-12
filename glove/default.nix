@@ -5,8 +5,6 @@
         pkgs.clang-tools
         pkgs.platformio
       ];
-
-      env.ESPBAUD = 921600;
     };
 
     treefmt.programs = {
