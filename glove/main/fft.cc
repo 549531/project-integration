@@ -1,5 +1,12 @@
 #include "fft.hh"
-extern Adafruit_MPU6050 mpu;
+
+#include "mpu.hh"
+
+static char const *TAG = "fft";
+
+fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {
+	lv_timer_create(fft::timer_cb, 1000 / fft::FS, this);
+}
 
 /*----------------------------------------------------*/
 /* 1. Static wrapper – never touches member data      */
@@ -14,7 +21,7 @@ void fft::timer_cb(lv_timer_t *t) {
 /*----------------------------------------------------*/
 void fft::update() {
 	sensors_event_t a, g, t;
-	mpu.getEvent(&a, &g, &t);
+	mpu_get(&a, &g, &t);
 
 	static float phase = 0.0f;            // keeps running
 	phase += TWO_PI * 2.0f / FS;          // Δφ = 2 Hz / 128 Hz
@@ -22,8 +29,7 @@ void fft::update() {
 	vReal[idx] = sinf(phase);             // deg/s
 	vImag[idx] = 0.0f;
 
-	Serial.print(F(">Test sin:"));
-	Serial.println(vReal[idx]);
+	ESP_LOGI(TAG, "> Test sin: %f", vReal[idx]);
 
 	if (fDrive > 0.0f) invert_signal();
 
@@ -38,8 +44,7 @@ void fft::invert_signal() {
 	if (phaseAcc > TWO_PI) phaseAcc -= TWO_PI;
 
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
-	Serial.print(F(">Inv:"));
-	Serial.println(invSample);
+	ESP_LOGI(TAG, "> Inv: %f", invSample);
 }
 
 void fft::compute_fft() {
@@ -63,7 +68,7 @@ void fft::compute_fft() {
 
 	fftEngine.complexToMagnitude();
 	char pkt[768];
-	size_t len = sprintf(pkt, ">FFT:");
+	size_t len = sprintf(pkt, "> FFT:");
 	for (uint8_t k = 0; k < SAMPLES / 2; ++k) {
 		float freq = k * FS / SAMPLES;
 		len += snprintf(pkt + len, sizeof(pkt) - len, "%u:%.3f%s",
@@ -71,5 +76,5 @@ void fft::compute_fft() {
 				(k < SAMPLES / 2 - 1) ? ";" : "");
 	}
 	strcat(pkt, "|xy,clr\n");
-	Serial.write(pkt, strlen(pkt));
+	ESP_LOGI(TAG, "%s", pkt);
 }
