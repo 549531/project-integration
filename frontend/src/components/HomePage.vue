@@ -16,27 +16,23 @@ const searchEl = ref<HTMLInputElement>()
 const searchWrapperEl = ref<HTMLInputElement>()
 const chartsEl = ref<HTMLInputElement>()
 
-const deviceIdRaw = ref('')
-const deviceIdRaw_IsLegit = computed(() => {
-  const id = deviceIdRaw.value.trim()
+const isLegitDevId = (devId: string | undefined) => {
+  if (devId === undefined) return false
+  const id = devId.trim()
   return legitIds.has(id)
-})
-const deviceId = ref<string>()
-const searchSmall = computed(() => deviceId.value !== undefined)
-
-function checkLogin() {
-  if (deviceIdRaw_IsLegit.value) {
-    deviceId.value = deviceIdRaw.value.trim()
-  } else {
-    deviceId.value = undefined
-  }
 }
+
+const devIdModel = ref('')
+const lastInputDevId = ref<string>()
+const lastLegitDevId = computed<string | undefined>((previous) =>
+  isLegitDevId(lastInputDevId.value) ? lastInputDevId.value : previous,
+)
 
 const timeline = computed(() => {
   const search = searchEl.value
   const searchWrapper = searchWrapperEl.value
-  const chart = chartsEl.value
-  if (!search || !searchWrapper || !chart) return
+  const charts = chartsEl.value
+  if (!search || !searchWrapper || !charts) return
   return gsap
     .timeline({
       paused: true,
@@ -66,7 +62,7 @@ const timeline = computed(() => {
       '<',
     )
     .fromTo(
-      chart,
+      charts,
       { autoAlpha: 0, display: 'none' },
       { autoAlpha: 1, display: 'grid' },
       '<',
@@ -76,7 +72,7 @@ const timeline = computed(() => {
 watchEffect(() => {
   const tl = timeline.value
   if (!tl) return
-  if (searchSmall.value) {
+  if (isLegitDevId(lastInputDevId.value)) {
     tl.play()
   } else {
     tl.reverse()
@@ -96,12 +92,12 @@ watchEffect(() => {
       autofocus
       class="border border-black-300 rounded-full shadow"
       ref="searchEl"
-      v-model="deviceIdRaw"
+      v-model="devIdModel"
       @keydown.enter="
-        deviceIdRaw_IsLegit && ($event.target as HTMLInputElement).blur()
+        isLegitDevId(devIdModel) && ($event.target as HTMLInputElement).blur()
       "
-      @focus="deviceId = undefined"
-      @blur="checkLogin()"
+      @focus="lastInputDevId = undefined"
+      @blur="lastInputDevId = devIdModel"
     />
   </div>
   <div
