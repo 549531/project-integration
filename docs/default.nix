@@ -17,10 +17,10 @@
           pkgs.nodejs
           py
         ];
+    };
 
-      treefmt.programs = {
-        black.enable = true;
-      };
+    treefmt.programs = {
+      black.enable = true;
     };
   };
 }
