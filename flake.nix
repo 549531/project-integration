@@ -13,6 +13,7 @@
 
       imports = [
         ./Pint/default.nix
+        ./api/default.nix
         ./docs/default.nix
         ./glove/default.nix
         inputs.make-shell.flakeModules.default
