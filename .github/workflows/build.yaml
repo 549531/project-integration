@@ -82,3 +82,19 @@ jobs:
     steps:
       - name: Deploy
         uses: actions/deploy-pages@v4
+  api:
+    needs: skip_check
+    if: needs.skip_check.outputs.should_skip != 'true' && !fromJSON(needs.skip_check.outputs.paths_result).api.should_skip
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install python dependencies
+        run: cd api && uv sync --locked --all-extras --dev
+      - name: Run Django tests
+        run: cd api && uv run manage.py test
