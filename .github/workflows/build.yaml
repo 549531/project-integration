@@ -54,6 +54,7 @@ jobs:
           cache: pip
       - name: Install latest PlantUML
         run: |
+          sudo apt update
           sudo apt install -y default-jre graphviz
           sudo curl -fSLo /opt/plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
           sudo tee /usr/bin/plantuml <<'EOF'
