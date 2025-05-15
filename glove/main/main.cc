@@ -2,40 +2,9 @@
 #include <TFT_eSPI.h>
 #include <lvgl.h>
 
+#include "button.hh"
+
 static char const *TAG = "main";
-
-struct button_t {
-	using callback_t = void (*)(void *);
-
-	gpio_num_t m_pin;
-	callback_t m_click_cb;
-
-	bool m_value{};
-	int64_t m_time{};
-
-	bool m_last_value{};
-	int64_t m_last_time{};
-
-	button_t(gpio_num_t pin, callback_t click_cb)
-	    : m_pin{pin}, m_click_cb{click_cb} {}
-
-	void update(void *arg) {
-		bool now_value = !gpio_get_level(m_pin);
-		int64_t now = esp_timer_get_time();
-		if (now_value != m_last_value) {
-			m_last_value = now_value;
-			m_last_time = now;
-		}
-		if (m_value != m_last_value && m_last_time - m_time >= 50) {
-			m_value = m_last_value;
-			m_time = m_last_time;
-			if (m_value) {
-				assert(m_click_cb);
-				m_click_cb(arg);
-			}
-		}
-	}
-};
 
 uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
