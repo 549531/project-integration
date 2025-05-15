@@ -5,11 +5,10 @@
         pkgs.clang-tools
         pkgs.platformio
       ];
-
-      env.ESPBAUD = 921600;
     };
 
     treefmt.programs = {
+      black.enable = true;
       clang-format.enable = true;
       cmake-format.enable = true;
     };
