@@ -11,6 +11,7 @@
       black.enable = true;
       clang-format.enable = true;
       cmake-format.enable = true;
+      cmake-format.includes = [ "*.cmake" "*/CMakeLists.txt" "CMakeLists.txt" ];
     };
   };
 }
