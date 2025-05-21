@@ -1,5 +1,5 @@
 !sdkconfig.defaults
 .pio
 compile_commands.json
-sdkconfig.*
 .vscode
+sdkconfig.*
