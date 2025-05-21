@@ -26,7 +26,8 @@ SECRET_KEY = "django-insecure-t)2zc&3332jxqv%e%-+*h353-jy-x35*etc$y&(2wq+by5nd2l
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "project-integratin.foo.ng",
+    "127.0.0.1",
+    "project-integration.foo.ng",
 ]
 
 
