@@ -25,12 +25,16 @@ SECRET_KEY = "django-insecure-t)2zc&3332jxqv%e%-+*h353-jy-x35*etc$y&(2wq+by5nd2l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "project-integration.foo.ng",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -65,6 +69,8 @@ TEMPLATES = [
         },
     },
 ]
+
+ASGI_APPLICATION = "api.asgi.application"
 
 WSGI_APPLICATION = "api.wsgi.application"
 

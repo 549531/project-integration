@@ -1,17 +1,31 @@
 ## Repository organization
 
-| Path   | Description                                                                                                                               |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| docs/  | This project's documentation, made with [Sphinx]. Automatically deployed to [GitHub Pages](https://549531.github.io/project-integration). |
-| glove/ | [ESP-IDF] project, built with [PlatformIO]. Deployed to the ESP32 embedded in the glove.                                                  |
-| Pint/  | This project's website, available on the [web]. Built with [Vue.js] and [GSAP].                                                           |
+| Path      | Description                                                                                                                               |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| api/      | Backend for this project. Built with [Django].                                                                                            |
+| docs/     | This project's documentation, made with [Sphinx]. Automatically deployed to [GitHub Pages](https://549531.github.io/project-integration). |
+| glove/    | [ESP-IDF] project, built with [PlatformIO]. Deployed to the ESP32 embedded in the glove.                                                  |
+| frontend/ | This project's website, available on the [web]. Built with [Vue.js] and [GSAP].                                                           |
 
+[Django]: https://www.djangoproject.com/
 [ESP-IDF]: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html
 [GSAP]: https://gsap.com/
 [PlatformIO]: https://docs.platformio.org/en/latest/core/index.html
 [Sphinx]: https://www.sphinx-doc.org/
 [Vue.js]: https://vuejs.org/
 [web]: https://project-integration.foo.ng/
+
+## API
+
+### Run development server
+
+```
+cd api
+# 1. Install dependencies
+uv sync
+# 2. Start the server
+uv run manage.py runserver
+```
 
 ## Documentation
 

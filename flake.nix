@@ -12,9 +12,9 @@
       systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
       imports = [
-        ./Pint/default.nix
         ./api/default.nix
         ./docs/default.nix
+        ./frontend/default.nix
         ./glove/default.nix
         inputs.make-shell.flakeModules.default
         inputs.treefmt-nix.flakeModule
