@@ -15,6 +15,18 @@
 [Vue.js]: https://vuejs.org/
 [web]: https://project-integration.foo.ng/
 
+## API
+
+### Run development server
+
+```
+cd api
+# 1. Install dependencies
+uv sync
+# 2. Start the server
+uv run manage.py runserver
+```
+
 ## Documentation
 
 ### Build
