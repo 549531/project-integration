@@ -1,0 +1,4 @@
+processes:
+  api:
+    command: uv run gunicorn api.asgi:application -k uvicorn_worker.UvicornWorker
+    working_dir: api
