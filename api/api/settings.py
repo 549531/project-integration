@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-t)2zc&3332jxqv%e%-+*h353-jy-x35*etc$y&(2wq+by5nd2l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "project-integratin.foo.ng",
+]
 
 
 # Application definition
