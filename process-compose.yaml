@@ -2,6 +2,8 @@ processes:
   api:
     command: uv run manage.py runserver 2948
     working_dir: api
+    environment:
+    - DJANGO_DEBUG=True
   docs:
     command: make livehtml
     working_dir: docs
