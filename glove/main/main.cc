@@ -10,6 +10,11 @@ uint32_t my_lv_draw_buf[TFT_WIDTH * TFT_HEIGHT / 4];
 
 static uint32_t my_lv_tick_get() { return millis(); }
 
+static void lvgl_init() {
+	lv_init();
+	lv_tick_set_cb(my_lv_tick_get);
+}
+
 static void chart_update(lv_timer_t *t) {
 	auto chart = (lv_obj_t *)lv_timer_get_user_data(t);
 	auto series = lv_chart_get_series_next(chart, nullptr);
@@ -17,12 +22,7 @@ static void chart_update(lv_timer_t *t) {
 	lv_chart_refresh(chart);
 }
 
-extern "C" void app_main() {
-	ESP_LOGI(TAG, "boot done");
-
-	lv_init();
-	lv_tick_set_cb(my_lv_tick_get);
-
+static lv_obj_t *chart_init() {
 	auto disp = lv_tft_espi_create(TFT_WIDTH, TFT_HEIGHT, my_lv_draw_buf,
 				       sizeof my_lv_draw_buf);
 	lv_display_set_rotation(disp, LV_DISPLAY_ROTATION_270);
@@ -50,9 +50,18 @@ extern "C" void app_main() {
 			    LV_CHART_AXIS_PRIMARY_Y);
 
 	lv_timer_create(chart_update, 100, chart);
-	lv_timer_create(buttons_update, 33, chart);
 
+	return chart;
+}
+
+extern "C" void app_main() {
+	ESP_LOGI(TAG, "boot done");
+
+	lvgl_init();
 	ESP_LOGI(TAG, "lvgl config done");
+
+	lv_obj_t *chart = chart_init();
+	ESP_LOGI(TAG, "chart config done");
 
 	buttons_init(chart);
 	ESP_LOGI(TAG, "buttons config done");
