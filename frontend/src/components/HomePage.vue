@@ -16,8 +16,8 @@ const isLegitDevId = (devId: string | undefined) => {
   return legitIds.has(id)
 }
 
-const devIdModel = ref('')
-const lastInputDevId = ref<string>()
+const devIdModel = ref('12345678')
+const lastInputDevId = ref<string | undefined>('12345678')
 const lastLegitDevId = computed<string | undefined>((previous) =>
   isLegitDevId(lastInputDevId.value) ? lastInputDevId.value : previous,
 )
@@ -46,7 +46,6 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     <input
       maxlength="8"
       placeholder="Enter your glove ID"
-      autofocus
       class="border-[#2a3c70]/80 text-center outline-1 outline-slate-300-[#2a3c70] rounded-full shadow-xl shadow-blue-500/35 transition-all"
       :class="{
         'px-16': !isLegitDevId(lastInputDevId),
