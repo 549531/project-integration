@@ -27,7 +27,9 @@ SECRET_KEY = "django-insecure-t)2zc&3332jxqv%e%-+*h353-jy-x35*etc$y&(2wq+by5nd2l
 DEBUG = os.getenv("DJANGO_DEBUG") is not None
 
 ALLOWED_HOSTS = [
+    "0.0.0.0",
     "127.0.0.1",
+    "localhost",
     "project-integration.foo.ng",
 ]
 
