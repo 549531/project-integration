@@ -7,9 +7,16 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs =
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+      systems = [
+        "x86_64-linux"
+        "i686-linux"
+        "x86_64-darwin"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
 
       imports = [
         ./api/default.nix
@@ -20,19 +27,21 @@
         inputs.treefmt-nix.flakeModule
       ];
 
-      perSystem = { config, pkgs, ... }: {
-        make-shells.default = {
-          packages = [
-            config.treefmt.build.wrapper
-          ];
-        };
+      perSystem =
+        { config, pkgs, ... }:
+        {
+          make-shells.default = {
+            packages = [
+              config.treefmt.build.wrapper
+            ];
+          };
 
-        treefmt.programs = {
-          nixpkgs-fmt.enable = true;
-          shfmt.enable = true;
-          taplo.enable = true;
-          yamlfmt.enable = true;
+          treefmt.programs = {
+            nixfmt.enable = true;
+            shfmt.enable = true;
+            taplo.enable = true;
+            yamlfmt.enable = true;
+          };
         };
-      };
     };
 }
