@@ -1,17 +1,23 @@
 {
-  perSystem = { pkgs, ... }: {
-    make-shells.default = {
-      packages = [
-        pkgs.clang-tools
-        pkgs.platformio
-      ];
-    };
+  perSystem =
+    { pkgs, ... }:
+    {
+      make-shells.default = {
+        packages = [
+          pkgs.clang-tools
+          pkgs.platformio
+        ];
+      };
 
-    treefmt.programs = {
-      black.enable = true;
-      clang-format.enable = true;
-      cmake-format.enable = true;
-      cmake-format.includes = [ "*.cmake" "*/CMakeLists.txt" "CMakeLists.txt" ];
+      treefmt.programs = {
+        black.enable = true;
+        clang-format.enable = true;
+        cmake-format.enable = true;
+        cmake-format.includes = [
+          "*.cmake"
+          "*/CMakeLists.txt"
+          "CMakeLists.txt"
+        ];
+      };
     };
-  };
 }
