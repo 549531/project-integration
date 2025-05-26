@@ -1,14 +1,16 @@
 {
-  perSystem = { pkgs, ... }: {
-    make-shells.default = {
-      packages = [
-        pkgs.yarn-berry
-      ];
+  perSystem =
+    { pkgs, ... }:
+    {
+      make-shells.default = {
+        packages = [
+          pkgs.yarn-berry
+        ];
 
-    };
+      };
 
-    treefmt.programs = {
-      prettier.enable = true;
+      treefmt.programs = {
+        prettier.enable = true;
+      };
     };
-  };
 }
