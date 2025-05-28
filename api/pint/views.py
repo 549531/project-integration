@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 from random import randint
 import json
+import asyncio
 import nats
 
 # Create your views here.
@@ -52,7 +53,10 @@ async def amplitude_live(request, device_id):
                 yield "\n\n"
         except TimeoutError:
             yield "\n\n"
+        except asyncio.CancelledError:
+            pass
 
+        await sub.unsubscribe()
         await nc.close()
 
     return StreamingHttpResponse(
