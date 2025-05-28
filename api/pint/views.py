@@ -37,7 +37,7 @@ async def amplitude_live(request, device_id):
         sub = await js.pull_subscribe(f"devices.{device_id}.amplitude", config=conf)
 
         try:
-            while msgs := await sub.fetch(batch=100):
+            while msgs := await sub.fetch(batch=1024):
                 res = {
                     "data": [
                         {
