@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 from random import randint
 import json
@@ -24,7 +25,15 @@ async def amplitude_live(request, device_id):
             password="pint",
         )
         js = nc.jetstream()
-        conf = nats.js.api.ConsumerConfig(ack_policy=nats.js.api.AckPolicy.NONE)
+
+        conf = nats.js.api.ConsumerConfig(
+            mem_storage=True,
+            ack_policy=nats.js.api.AckPolicy.NONE,
+            deliver_policy=nats.js.api.DeliverPolicy.BY_START_TIME,
+            opt_start_time=(
+                datetime.now(timezone.utc) - timedelta(minutes=2)
+            ).isoformat(),
+        )
         sub = await js.pull_subscribe(f"devices.{device_id}.amplitude", config=conf)
 
         try:
