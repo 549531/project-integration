@@ -24,9 +24,9 @@ lv_obj_t *chart_init() {
 				       sizeof my_lv_draw_buf);
 	lv_display_set_rotation(disp, LV_DISPLAY_ROTATION_270);
 
-	int32_t col_desc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	int32_t row_desc[] = {LV_GRID_CONTENT, LV_GRID_FR(1),
-			      LV_GRID_TEMPLATE_LAST};
+	static int32_t col_desc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t row_desc[] = {LV_GRID_CONTENT, LV_GRID_FR(1),
+				     LV_GRID_TEMPLATE_LAST};
 
 	auto grid = lv_obj_create(lv_screen_active());
 	lv_obj_set_size(grid, LV_PCT(100), LV_PCT(100));

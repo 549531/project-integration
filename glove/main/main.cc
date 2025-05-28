@@ -24,7 +24,7 @@ void initMPU() {
 static char const *TAG = "main";
 
 extern "C" void app_main() {
-	Serial.begin(115200);
+	Serial.begin(921600);
 	ESP_LOGI(TAG, "boot done");
 
 	initMPU();
