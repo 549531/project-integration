@@ -1,6 +1,6 @@
 name: Build
 on:
-  push: {branch: main}
+  push: {branches: main}
   pull_request: {}
 permissions:
   actions: write
