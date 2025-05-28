@@ -11,3 +11,6 @@ dependencies = [
   "uvicorn>=0.34.2",
   "uvicorn-worker>=0.3.0",
 ]
+
+[dependency-groups]
+dev = ["ruff>=0.11.11"]
