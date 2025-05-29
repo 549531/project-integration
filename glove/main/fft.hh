@@ -28,7 +28,7 @@ struct fft {
 	// Constructor
 	fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
 
-    // Public API
+	// Public API
 	static void timer_cb(lv_timer_t *t);  // <<< the LVGL callback
 	void invert_signal();
 	void compute_fft();
