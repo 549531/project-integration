@@ -11,6 +11,7 @@
 
       treefmt.programs = {
         prettier.enable = true;
+        prettier.excludes = [ "*/yarn-*.cjs" ];
       };
     };
 }
