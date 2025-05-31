@@ -1,7 +1,12 @@
 #include "fft.hh"
-extern Adafruit_MPU6050 mpu;
+
+#include "mpu.hh"
 
 static char const *TAG = "fft";
+
+fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {
+	lv_timer_create(fft::timer_cb, 1000 / fft::FS, this);
+}
 
 /*----------------------------------------------------*/
 /* 1. Static wrapper – never touches member data      */
@@ -16,7 +21,7 @@ void fft::timer_cb(lv_timer_t *t) {
 /*----------------------------------------------------*/
 void fft::update() {
 	sensors_event_t a, g, t;
-	mpu.getEvent(&a, &g, &t);
+	mpu_get(&a, &g, &t);
 
 	static float phase = 0.0f;            // keeps running
 	phase += TWO_PI * 2.0f / FS;          // Δφ = 2 Hz / 128 Hz
