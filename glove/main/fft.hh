@@ -1,9 +1,9 @@
 #pragma once
+
 #include <Adafruit_MPU6050.h>
 #include <Arduino.h>
 #include <arduinoFFT.h>
 
-#include <cmath>
 #include <cstdint>
 
 #include "network.hh"
@@ -28,7 +28,7 @@ struct fft {
 	float phaseAcc = 0.0f;  // rad  – phase accumulator for sine
 
 	// Constructor
-	fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
+	fft();
 
 	// Public API
 	void invert_signal(Network* net);
