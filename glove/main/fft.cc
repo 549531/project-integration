@@ -1,6 +1,8 @@
 #include "fft.hh"
 extern Adafruit_MPU6050 mpu;
 
+static char const *TAG = "fft";
+
 /*----------------------------------------------------*/
 /* 1. Being called 128 times every second             */
 /*----------------------------------------------------*/
@@ -15,8 +17,7 @@ void fft::update(Network *net) {
 	vImag[idx] = 0.0f;
 
 	// send values one by one
-	Serial.print(F(">Test sin:"));
-	Serial.println(vReal[idx]);
+	ESP_LOGI(TAG, "> Test sin: %f", vReal[idx]);
 
 	if (fDrive > 0.0f) invert_signal(net);
 
@@ -31,8 +32,7 @@ void fft::invert_signal(Network *net) {
 	if (phaseAcc > TWO_PI) phaseAcc -= TWO_PI;
 
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
-	Serial.print(F(">Inv:"));
-	Serial.println(invSample);
+	ESP_LOGI(TAG, "> Inv: %f", invSample);
 	net->push(invSample);
 }
 
