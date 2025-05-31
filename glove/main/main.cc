@@ -11,20 +11,19 @@ Adafruit_MPU6050 mpu;
 // global fft object
 static fft g_fft;
 
+static char const *TAG = "main";
+
 void initMPU() {
 	if (!mpu.begin()) {
-		Serial.println("MPU6050 not found");
-		while (true) delay(10);
+		ESP_LOGE(TAG, "MPU6050 not found");
+		abort();
 	}
 	mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
 	mpu.setGyroRange(MPU6050_RANGE_250_DEG);     // best LSB resolution
 	mpu.setFilterBandwidth(MPU6050_BAND_44_HZ);  // stop >64 Hz aliasing
 }
 
-static char const *TAG = "main";
-
 extern "C" void app_main() {
-	Serial.begin(921600);
 	ESP_LOGI(TAG, "boot done");
 
 	initMPU();
