@@ -4,30 +4,18 @@
 #include "buttons.hh"
 #include "chart.hh"
 #include "fft.hh"
-
-// MPU 6050
-Adafruit_MPU6050 mpu;
-
-// global fft object
-static fft g_fft;
+#include "mpu.hh"
 
 static char const *TAG = "main";
-
-void initMPU() {
-	if (!mpu.begin()) {
-		ESP_LOGE(TAG, "MPU6050 not found");
-		abort();
-	}
-	mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-	mpu.setGyroRange(MPU6050_RANGE_250_DEG);     // best LSB resolution
-	mpu.setFilterBandwidth(MPU6050_BAND_44_HZ);  // stop >64 Hz aliasing
-}
 
 extern "C" void app_main() {
 	ESP_LOGI(TAG, "boot done");
 
-	initMPU();
+	mpu_init();
 	ESP_LOGI(TAG, "mpu config done");
+
+	fft g_fft;
+	ESP_LOGI(TAG, "fft config done");
 
 	lvgl_init();
 	ESP_LOGI(TAG, "lvgl config done");
@@ -37,8 +25,6 @@ extern "C" void app_main() {
 
 	buttons_init(chart);
 	ESP_LOGI(TAG, "buttons config done");
-
-	lv_timer_create(fft::timer_cb, 1000 / fft::FS, &g_fft);
 
 	for (;;) {
 		uint32_t delay = lv_timer_handler();

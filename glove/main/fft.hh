@@ -1,9 +1,10 @@
+#pragma once
+
 #include <Adafruit_MPU6050.h>
 #include <Arduino.h>
 #include <arduinoFFT.h>
 #include <lvgl.h>
 
-#include <cmath>
 #include <cstdint>
 
 struct fft {
@@ -26,11 +27,13 @@ struct fft {
 	float phaseAcc = 0.0f;  // rad  – phase accumulator for sine
 
 	// Constructor
-	fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
+	fft();
 
 	// Public API
-	static void timer_cb(lv_timer_t *t);  // <<< the LVGL callback
 	void invert_signal();
 	void compute_fft();
 	void update();
+
+       private:
+	static void timer_cb(lv_timer_t *t);  // <<< the LVGL callback
 };

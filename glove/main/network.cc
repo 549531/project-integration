@@ -37,10 +37,12 @@ void Network::begin() {
 	_mqtt.setSocketTimeout(10);
 	_reconnect();
 }
+
 void Network::loop() {
 	if (!_mqtt.connected()) _reconnect();
 	_mqtt.loop();
 }
+
 bool Network::push(float value) {
 	char payload[32];
 	dtostrf(value, 0, 2, payload);                   // "123.45"
@@ -48,6 +50,7 @@ bool Network::push(float value) {
 	if (!ok) ESP_LOGI(TAG, "MQTT publish failed");
 	return ok;
 }
+
 void Network::_reconnect() {
 	while (!_mqtt.connected()) {
 		ESP_LOGI(TAG, "MQTT connect %s:%u …", _host, _port);
