@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/random': {
-        target: 'https://www.randomnumberapi.com',
+        target: 'https://project-integration.foo.ng/api/devices/123/amplitude/live/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/random/, '')
       }
