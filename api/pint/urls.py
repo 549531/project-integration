@@ -3,10 +3,10 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("devices/<int:device_id>/amplitude/", views.amplitude, name="amplitude"),
+    path("devices/<int:device_id>/<str:property>/", views.property, name="property"),
     path(
-        "devices/<int:device_id>/amplitude/live/",
-        views.amplitude_live,
-        name="amplitude_live",
+        "devices/<int:device_id>/<str:property>/live/",
+        views.property_live,
+        name="property_live",
     ),
 ]
