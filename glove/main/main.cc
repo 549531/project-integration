@@ -4,9 +4,10 @@
 #include "fft.hh"
 #include "network.hh"
 
-const char *ssid = "obbteam";
-const char *pwd = "1234567899";
-const char *mqtt_host = "138.199.207.53";
+const char *ssid = "ACSlab";
+const char *pwd = "lab@ACS24";
+// const char *mqtt_host = "138.199.207.53";
+const char *mqtt_host = "jarkad.net.eu.org";
 uint16_t mqtt_port = 8883;
 const char *mqtt_user = "pint";
 const char *mqtt_pass = "pint";
