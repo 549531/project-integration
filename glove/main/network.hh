@@ -19,7 +19,7 @@ class Network {
 		uint16_t mqtt_port = 8883,  // 1883 for plain
 		const char* mqtt_user = nullptr,
 		const char* mqtt_pass = nullptr,
-		const char* mqtt_topic = "sensor/data",
+		const char* mqtt_topic = "devices/12345678/amplitude",
 		const char* ca_cert_pem = nullptr);
 
 	/* call once from setup() */
