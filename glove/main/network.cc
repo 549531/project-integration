@@ -32,7 +32,7 @@ void Network::begin() {
 		_client.setInsecure();  // skip cert validation
 
 	_mqtt.setServer(_host, _port);
-	_mqtt.setBufferSize(256);  // long enough for JSON etc.
+	_mqtt.setBufferSize(64);  // long enough for JSON etc.
 	_mqtt.setSocketTimeout(10);
 	_reconnect();
 }

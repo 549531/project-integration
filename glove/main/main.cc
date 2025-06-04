@@ -4,12 +4,25 @@
 #include "buttons.hh"
 #include "chart.hh"
 #include "fft.hh"
+#include "network.hh"
+
+const char *ssid = "obbteam";
+const char *pwd = "1234567899";
+const char *mqtt_host = "mqtts://jarkad.net.eu.org";
+uint16_t mqtt_port = 8883;
+const char *mqtt_user = "pint";
+const char *mqtt_pass = "pint";
+
+// global network object
+static Network network(ssid, pwd, mqtt_host, mqtt_port, mqtt_user, mqtt_pass);
 
 // MPU 6050
 Adafruit_MPU6050 mpu;
 
 // global fft object
 static fft g_fft;
+
+static TimerCtx ctx{&network, &g_fft};
 
 void initMPU() {
 	if (!mpu.begin()) {
@@ -39,7 +52,10 @@ extern "C" void app_main() {
 	buttons_init(chart);
 	ESP_LOGI(TAG, "buttons config done");
 
-	lv_timer_create(fft::timer_cb, 1000 / fft::FS, &g_fft);
+	network.begin();
+	ESP_LOGI(TAG, "network config done");
+
+	lv_timer_create(fft::timer_cb, 1000 / fft::FS, &ctx);
 
 	for (;;) {
 		uint32_t delay = lv_timer_handler();

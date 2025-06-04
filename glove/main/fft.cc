@@ -5,14 +5,14 @@ extern Adafruit_MPU6050 mpu;
 /* 1. Static wrapper – never touches member data      */
 /*----------------------------------------------------*/
 void fft::timer_cb(lv_timer_t *t) {
-	auto *self = (fft *)lv_timer_get_user_data(t);
-	self->update();
+	auto *self = (TimerCtx *)lv_timer_get_user_data(t);
+	self->fft_obj->update(self->net);
 }
 
 /*----------------------------------------------------*/
 /* 2. Being called 128 times every second             */
 /*----------------------------------------------------*/
-void fft::update() {
+void fft::update(Network *net) {
 	sensors_event_t a, g, t;
 	mpu.getEvent(&a, &g, &t);
 
@@ -22,10 +22,11 @@ void fft::update() {
 	vReal[idx] = sinf(phase);             // deg/s
 	vImag[idx] = 0.0f;
 
+	// send values one by one
 	Serial.print(F(">Test sin:"));
 	Serial.println(vReal[idx]);
 
-	if (fDrive > 0.0f) invert_signal();
+	if (fDrive > 0.0f) invert_signal(net);
 
 	if (++idx >= SAMPLES) {
 		compute_fft();
@@ -33,13 +34,14 @@ void fft::update() {
 	}
 }
 
-void fft::invert_signal() {
+void fft::invert_signal(Network *net) {
 	phaseAcc += TWO_PI * fDrive / FS;
 	if (phaseAcc > TWO_PI) phaseAcc -= TWO_PI;
 
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
 	Serial.print(F(">Inv:"));
 	Serial.println(invSample);
+	net->push(invSample);
 }
 
 void fft::compute_fft() {
