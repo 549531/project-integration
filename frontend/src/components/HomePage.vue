@@ -77,42 +77,33 @@ const timeline = computed(() => {
     )
 })
 
-function lineChartOptions(x: string[], y: number[]): any {
-  return {
-    xAxis: { type: 'category', data: x },
-    yAxis: { type: 'value' },
-    series: [
-      {
-        data: y,
-        type: 'line',
-        smooth: true,
-      },
-    ],
-  }
+const lineChartOptions = {
+  xAxis: { type: 'category' },
+  yAxis: { type: 'value', scale: true },
+  series: [{ type: 'line', smooth: true }],
 }
 
 function graph({
   echartRef,
   url = '/random',
-  chartOptionsFn: lineChartOptions,
+  chartOptions,
   maxPoints = 50,
 }: {
   echartRef: Ref<HTMLDivElement | null>
   url?: string
-  chartOptionsFn: (x: string[], y: number[]) => any
+  chartOptions: any
   maxPoints?: number
 }) {
-  ///TODO: stay alive(optional)
-
   let source: EventSource | null = null
   let chartInstance: echarts.ECharts | null = null
 
-  const x_data = ref<string[]>([])
-  const y_data = ref<number[]>([])
+  const x_data: string[] = []
+  const y_data: number[] = []
 
   function start() {
     if (!echartRef.value) return
     chartInstance = echarts.init(echartRef.value)
+    chartInstance.setOption(chartOptions)
     source = new EventSource(url)
     source.onerror = (err) => {
       console.error('EventSource failed', err)
@@ -121,16 +112,16 @@ function graph({
       const numbers = JSON.parse(event.data)
       for (const point of numbers.data) {
         const timeLabel = new Date(point.time).toLocaleTimeString()
-        x_data.value.push(timeLabel)
-        y_data.value.push(point.value)
+        x_data.push(timeLabel)
+        y_data.push(point.value)
       }
-      while (x_data.value.length > maxPoints) x_data.value.shift()
-      while (y_data.value.length > maxPoints) y_data.value.shift()
+      while (x_data.length > maxPoints) x_data.shift()
+      while (y_data.length > maxPoints) y_data.shift()
 
-      if (chartInstance) {
-        const chartOption = lineChartOptions(x_data.value, y_data.value)
-        chartInstance.setOption(chartOption)
-      }
+      chartInstance?.setOption({
+        xAxis: { data: x_data },
+        series: [{ data: y_data }],
+      })
     }
   }
 
@@ -155,14 +146,14 @@ watchEffect((onCleanup) => {
       chartGraph = graph({
         echartRef,
         url: '/random',
-        chartOptionsFn: lineChartOptions,
+        chartOptions: lineChartOptions,
         maxPoints: 50,
       })
       chartGraph.start()
       chartGraph_1 = graph({
         echartRef: echartRef_1,
         url: '/random',
-        chartOptionsFn: lineChartOptions,
+        chartOptions: lineChartOptions,
         maxPoints: 50,
       })
       chartGraph_1.start()
