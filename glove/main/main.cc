@@ -1,14 +1,12 @@
 #include <Adafruit_MPU6050.h>
 #include <Arduino.h>
 
-#include "buttons.hh"
-#include "chart.hh"
 #include "fft.hh"
 #include "network.hh"
 
 const char *ssid = "obbteam";
 const char *pwd = "1234567899";
-const char *mqtt_host = "mqtts://jarkad.net.eu.org";
+const char *mqtt_host = "138.199.207.53";
 uint16_t mqtt_port = 8883;
 const char *mqtt_user = "pint";
 const char *mqtt_pass = "pint";
@@ -21,8 +19,6 @@ Adafruit_MPU6050 mpu;
 
 // global fft object
 static fft g_fft;
-
-static TimerCtx ctx{&network, &g_fft};
 
 void initMPU() {
 	if (!mpu.begin()) {
@@ -37,28 +33,22 @@ void initMPU() {
 static char const *TAG = "main";
 
 extern "C" void app_main() {
+	initArduino();
+	ESP_LOGI(TAG, "arduino boot done");
+
 	Serial.begin(921600);
 	ESP_LOGI(TAG, "boot done");
 
 	initMPU();
 	ESP_LOGI(TAG, "mpu config done");
 
-	lvgl_init();
-	ESP_LOGI(TAG, "lvgl config done");
-
-	lv_obj_t *chart = chart_init();
-	ESP_LOGI(TAG, "chart config done");
-
-	buttons_init(chart);
-	ESP_LOGI(TAG, "buttons config done");
-
 	network.begin();
 	ESP_LOGI(TAG, "network config done");
 
-	lv_timer_create(fft::timer_cb, 1000 / fft::FS, &ctx);
-
 	for (;;) {
-		uint32_t delay = lv_timer_handler();
+		uint32_t delay = 1000 / fft::FS;
 		vTaskDelay(pdMS_TO_TICKS(delay));
+		network.loop();
+		g_fft.update(&network);
 	}
 }

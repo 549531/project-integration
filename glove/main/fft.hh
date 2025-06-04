@@ -2,8 +2,6 @@
 #include <Adafruit_MPU6050.h>
 #include <Arduino.h>
 #include <arduinoFFT.h>
-#include <lvgl.h>
-
 #include <cmath>
 #include <cstdint>
 
@@ -32,7 +30,6 @@ struct fft {
 	fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
 
 	// Public API
-	static void timer_cb(lv_timer_t* t);  // <<< the LVGL callback
 	void invert_signal(Network* net);
 	void compute_fft();
 	void update(Network* net);

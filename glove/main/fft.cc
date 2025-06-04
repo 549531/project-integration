@@ -2,15 +2,7 @@
 extern Adafruit_MPU6050 mpu;
 
 /*----------------------------------------------------*/
-/* 1. Static wrapper – never touches member data      */
-/*----------------------------------------------------*/
-void fft::timer_cb(lv_timer_t *t) {
-	auto *self = (TimerCtx *)lv_timer_get_user_data(t);
-	self->fft_obj->update(self->net);
-}
-
-/*----------------------------------------------------*/
-/* 2. Being called 128 times every second             */
+/* 1. Being called 128 times every second             */
 /*----------------------------------------------------*/
 void fft::update(Network *net) {
 	sensors_event_t a, g, t;
@@ -64,14 +56,12 @@ void fft::compute_fft() {
 	ampDrive = 2.0f * sqrtf(peakMag2) / SAMPLES;               // ≃ RMS
 
 	fftEngine.complexToMagnitude();
-	char pkt[768];
-	size_t len = sprintf(pkt, ">FFT:");
+
+	Serial.print(">FFT:");
 	for (uint8_t k = 0; k < SAMPLES / 2; ++k) {
 		float freq = k * FS / SAMPLES;
-		len += snprintf(pkt + len, sizeof(pkt) - len, "%u:%.3f%s",
-				(unsigned)freq, vReal[k],
-				(k < SAMPLES / 2 - 1) ? ";" : "");
+		Serial.printf("%u:%.3f%s", (unsigned)freq, vReal[k],
+			      (k < SAMPLES / 2 - 1) ? ";" : "");
 	}
-	strcat(pkt, "|xy,clr\n");
-	Serial.write(pkt, strlen(pkt));
+	Serial.print("|xy,clr\n");
 }

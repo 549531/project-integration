@@ -43,7 +43,7 @@ void Network::loop() {
 }
 
 bool Network::push(float value) {
-	char payload[32];
+	char payload[8];
 	dtostrf(value, 0, 2, payload);                   // "123.45"
 	bool ok = _mqtt.publish(_topic, payload, true);  // retained
 	if (!ok) Serial.println(F("[NET] MQTT publish failed"));
