@@ -14,7 +14,7 @@ static fft g_fft;
 void initMPU() {
 	if (!mpu.begin()) {
 		Serial.println("MPU6050 not found");
-		while (true) delay(10);
+		abort();
 	}
 	mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
 	mpu.setGyroRange(MPU6050_RANGE_250_DEG);     // best LSB resolution
