@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 #include "fft.hh"
+#include "mpu.hh"
 #include "network.hh"
 
 const char *ssid = "ACSlab";
@@ -15,22 +16,6 @@ const char *mqtt_pass = "pint";
 // global network object
 static Network network(ssid, pwd, mqtt_host, mqtt_port, mqtt_user, mqtt_pass);
 
-// MPU 6050
-Adafruit_MPU6050 mpu;
-
-// global fft object
-static fft g_fft;
-
-void initMPU() {
-	if (!mpu.begin()) {
-		Serial.println("MPU6050 not found");
-		abort();
-	}
-	mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-	mpu.setGyroRange(MPU6050_RANGE_250_DEG);     // best LSB resolution
-	mpu.setFilterBandwidth(MPU6050_BAND_44_HZ);  // stop >64 Hz aliasing
-}
-
 static char const *TAG = "main";
 
 extern "C" void app_main() {
@@ -40,11 +25,14 @@ extern "C" void app_main() {
 	Serial.begin(921600);
 	ESP_LOGI(TAG, "boot done");
 
-	initMPU();
+	mpu_init();
 	ESP_LOGI(TAG, "mpu config done");
 
 	network.begin();
 	ESP_LOGI(TAG, "network config done");
+
+	fft g_fft;
+	ESP_LOGI(TAG, "fft config done");
 
 	for (;;) {
 		uint32_t delay = 1000 / fft::FS;

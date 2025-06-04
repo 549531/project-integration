@@ -1,17 +1,20 @@
 #include "fft.hh"
-extern Adafruit_MPU6050 mpu;
+
+#include "mpu.hh"
+
+fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
 
 /*----------------------------------------------------*/
 /* 1. Being called 128 times every second             */
 /*----------------------------------------------------*/
 void fft::update(Network *net) {
 	sensors_event_t a, g, t;
-	mpu.getEvent(&a, &g, &t);
+	mpu_get(&a, &g, &t);
 
 	// static float phase = 0.0f;            // keeps running
 	// phase += TWO_PI * 2.0f / FS;          // Δφ = 2 Hz / 128 Hz
 	// if (phase > TWO_PI) phase -= TWO_PI;  // wrap once per cycle
-	vReal[idx] = g.gyro.x;             // deg/s
+	vReal[idx] = g.gyro.x;  // deg/s
 	vImag[idx] = 0.0f;
 
 	// send values one by one
@@ -52,7 +55,7 @@ void fft::compute_fft() {
 	fDrive = peakIdx * FS / SAMPLES;  // Hz
 
 	float phasePeak = atan2f(vImag[peakIdx], vReal[peakIdx]);  // rad
-	phaseInv = phasePeak - PI / 2;                                 // +180°
+	phaseInv = phasePeak - PI / 2;                             // +180°
 	ampDrive = 4.0f * sqrtf(peakMag2) / SAMPLES;               // ≃ RMS
 
 	// fftEngine.complexToMagnitude();
