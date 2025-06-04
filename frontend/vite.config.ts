@@ -6,12 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     proxy: {
-      '/random': {
-        target:
-          'https://project-integration.foo.ng/api/devices/123/amplitude/live/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/random/, ''),
-      },
+      '/api': 'https://project-integration.foo.ng',
     },
   },
   plugins: [vue(), tailwindcss()],

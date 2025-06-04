@@ -85,7 +85,7 @@ const lineChartOptions = {
 
 function graph({
   echartRef,
-  url = '/random',
+  url = '/api/devices/123/amplitude/live/',
   chartOptions,
   maxPoints = 50,
 }: {
@@ -145,14 +145,14 @@ watchEffect((onCleanup) => {
       await tl.play()
       chartGraph = graph({
         echartRef,
-        url: '/random',
+        url: '/api/devices/123/amplitude/live/',
         chartOptions: lineChartOptions,
         maxPoints: 50,
       })
       chartGraph.start()
       chartGraph_1 = graph({
         echartRef: echartRef_1,
-        url: '/random',
+        url: '/api/devices/123/amplitude/live/',
         chartOptions: lineChartOptions,
         maxPoints: 50,
       })
