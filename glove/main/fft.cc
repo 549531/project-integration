@@ -1,8 +1,14 @@
 #include "fft.hh"
 
+#include <ESP32Servo.h>
+
 #include "mpu.hh"
 
-fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
+Servo servo;
+
+fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {
+	servo.attach(17, 1000, 2000);
+}
 
 /*----------------------------------------------------*/
 /* 1. Being called 128 times every second             */
@@ -36,6 +42,7 @@ void fft::invert_signal(Network *net) {
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
 	Serial.print(F(">Inv:"));
 	Serial.println(invSample);
+	servo.write(map(invSample * 10, -3, 3, 0, 180));
 	net->push(invSample);
 }
 
