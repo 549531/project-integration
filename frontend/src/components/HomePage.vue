@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onBeforeUnmount, type Ref, ref, watchEffect } from 'vue'
 import gsap from 'gsap'
-
+import * as echarts from 'echarts'
 import chartImg from '../assets/chart.gif'
 
 const legitIds = new Set([
@@ -15,6 +15,10 @@ const legitIds = new Set([
 const searchEl = ref<HTMLInputElement>()
 const searchWrapperEl = ref<HTMLInputElement>()
 const chartsEl = ref<HTMLInputElement>()
+const echartRef = ref<HTMLDivElement | null>(null)
+const echartRef_1 = ref<HTMLDivElement | null>(null)
+let chartGraph: ReturnType<typeof graph> | null = null
+let chartGraph_1: ReturnType<typeof graph> | null = null
 
 const deviceIdRaw = ref('')
 const deviceIdRaw_IsLegit = computed(() => {
@@ -73,13 +77,98 @@ const timeline = computed(() => {
     )
 })
 
-watchEffect(() => {
+const lineChartOptions = {
+  xAxis: { type: 'category' },
+  yAxis: { type: 'value', scale: true },
+  series: [{ type: 'line', smooth: true }],
+}
+
+function graph({
+  echartRef,
+  url = '/api/devices/123/amplitude/live/',
+  chartOptions,
+  maxPoints = 50,
+}: {
+  echartRef: Ref<HTMLDivElement | null>
+  url?: string
+  chartOptions: any
+  maxPoints?: number
+}) {
+  let source: EventSource | null = null
+  let chartInstance: echarts.ECharts | null = null
+
+  const x_data: string[] = []
+  const y_data: number[] = []
+
+  function start() {
+    if (!echartRef.value) return
+    chartInstance = echarts.init(echartRef.value)
+    chartInstance.setOption(chartOptions)
+    source = new EventSource(url)
+    source.onerror = (err) => {
+      console.error('EventSource failed', err)
+    }
+    source.onmessage = (event) => {
+      const numbers = JSON.parse(event.data)
+      for (const point of numbers.data) {
+        const timeLabel = new Date(point.time).toLocaleTimeString()
+        x_data.push(timeLabel)
+        y_data.push(point.value)
+      }
+      while (x_data.length > maxPoints) x_data.shift()
+      while (y_data.length > maxPoints) y_data.shift()
+
+      chartInstance?.setOption({
+        xAxis: { data: x_data },
+        series: [{ data: y_data }],
+      })
+    }
+  }
+
+  function stop() {
+    if (chartInstance) chartInstance.dispose()
+    if (source) source.close()
+  }
+
+  onBeforeUnmount(stop)
+
+  return { start, stop }
+}
+
+watchEffect((onCleanup) => {
   const tl = timeline.value
+  console.log('watchEffect triggered — deviceId:', deviceId.value)
+  console.log('searchSmall:', searchSmall.value)
   if (!tl) return
   if (searchSmall.value) {
-    tl.play()
+    ;(async () => {
+      await tl.play()
+      chartGraph = graph({
+        echartRef,
+        url: '/api/devices/123/amplitude/live/',
+        chartOptions: lineChartOptions,
+        maxPoints: 50,
+      })
+      chartGraph.start()
+      chartGraph_1 = graph({
+        echartRef: echartRef_1,
+        url: '/api/devices/123/amplitude/live/',
+        chartOptions: lineChartOptions,
+        maxPoints: 50,
+      })
+      chartGraph_1.start()
+    })()
+    onCleanup(() => {
+      chartGraph?.stop()
+      chartGraph = null
+      chartGraph_1?.stop()
+      chartGraph_1 = null
+    })
   } else {
-    tl.reverse()
+    chartGraph?.stop()
+    chartGraph = null
+    chartGraph_1?.stop()
+    chartGraph_1 = null
   }
 })
 </script>
@@ -108,6 +197,8 @@ watchEffect(() => {
     class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
     ref="chartsEl"
   >
+    <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef"></div>
+    <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef_1"></div>
     <img :src="chartImg" class="w-full" />
     <img :src="chartImg" class="w-full" />
     <img :src="chartImg" class="w-full col-span-2" />
