@@ -1,10 +1,11 @@
+#pragma once
 #include <Adafruit_MPU6050.h>
 #include <Arduino.h>
 #include <arduinoFFT.h>
-#include <lvgl.h>
-
 #include <cmath>
 #include <cstdint>
+
+#include "network.hh"
 
 struct fft {
 	// Constants
@@ -28,9 +29,13 @@ struct fft {
 	// Constructor
 	fft() : fftEngine(vReal, vImag, SAMPLES, FS) {}
 
-    // Public API
-	static void timer_cb(lv_timer_t *t);  // <<< the LVGL callback
-	void invert_signal();
+	// Public API
+	void invert_signal(Network* net);
 	void compute_fft();
-	void update();
+	void update(Network* net);
+};
+
+struct TimerCtx {
+	Network* net;
+	fft* fft_obj;
 };

@@ -45,6 +45,6 @@ class Network {
 	const char* _topic;
 	const char* _ca;
 
-	WiFiClientSecure _client;
+	WiFiClient _client;
 	PubSubClient _mqtt;
 };
