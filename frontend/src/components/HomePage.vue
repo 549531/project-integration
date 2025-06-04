@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, type Ref, ref, watchEffect} from 'vue'
+import { computed, onBeforeUnmount, type Ref, ref, watchEffect } from 'vue'
 import gsap from 'gsap'
 import * as echarts from 'echarts'
 import chartImg from '../assets/chart.gif'
@@ -42,67 +42,67 @@ const timeline = computed(() => {
   const chart = chartsEl.value
   if (!search || !searchWrapper || !chart) return
   return gsap
-      .timeline({
-        paused: true,
-        defaults: {duration: 0.25, ease: 'power4'},
-      })
-      .fromTo(
-          searchWrapper,
-          {
-            minWidth: 0,
-            minHeight: '100vh',
-          },
-          {
-            minWidth: '100vw',
-            minHeight: 0,
-          },
-      )
-      .fromTo(
-          search,
-          {
-            paddingBlock: '1em',
-            paddingInline: '8em',
-          },
-          {
-            paddingBlock: 0,
-            paddingInline: '1em',
-          },
-          '<',
-      )
-      .fromTo(
-          chart,
-          {autoAlpha: 0, display: 'none'},
-          {autoAlpha: 1, display: 'grid'},
-          '<',
-      )
+    .timeline({
+      paused: true,
+      defaults: { duration: 0.25, ease: 'power4' },
+    })
+    .fromTo(
+      searchWrapper,
+      {
+        minWidth: 0,
+        minHeight: '100vh',
+      },
+      {
+        minWidth: '100vw',
+        minHeight: 0,
+      },
+    )
+    .fromTo(
+      search,
+      {
+        paddingBlock: '1em',
+        paddingInline: '8em',
+      },
+      {
+        paddingBlock: 0,
+        paddingInline: '1em',
+      },
+      '<',
+    )
+    .fromTo(
+      chart,
+      { autoAlpha: 0, display: 'none' },
+      { autoAlpha: 1, display: 'grid' },
+      '<',
+    )
 })
 
 function lineChartOptions(x: string[], y: number[]): any {
   return {
-    xAxis: {type: 'category', data: x},
-    yAxis: {type: 'value'},
+    xAxis: { type: 'category', data: x },
+    yAxis: { type: 'value' },
     series: [
       {
         data: y,
         type: 'line',
-        smooth: true
-      }
-    ]
+        smooth: true,
+      },
+    ],
   }
 }
 
 function graph({
-                 echartRef,
-                 url = '/random',
-                 chartOptionsFn: lineChartOptions,
-                 maxPoints = 50,
-               }: {
+  echartRef,
+  url = '/random',
+  chartOptionsFn: lineChartOptions,
+  maxPoints = 50,
+}: {
   echartRef: Ref<HTMLDivElement | null>
   url?: string
   chartOptionsFn: (x: string[], y: number[]) => any
   maxPoints?: number
 }) {
-///TODO: stay alive(optional)
+  ///TODO: stay alive(optional)
 
   let source: EventSource | null = null
   let chartInstance: echarts.ECharts | null = null
@@ -110,13 +110,12 @@ function graph({
   const x_data = ref<string[]>([])
   const y_data = ref<number[]>([])
 
-
   function start() {
     if (!echartRef.value) return
     chartInstance = echarts.init(echartRef.value)
     source = new EventSource(url)
     source.onerror = (err) => {
-      console.error("EventSource failed", err)
+      console.error('EventSource failed', err)
     }
     source.onmessage = (event) => {
       const numbers = JSON.parse(event.data)
@@ -142,7 +141,7 @@ function graph({
 
   onBeforeUnmount(stop)
 
-  return {start, stop}
+  return { start, stop }
 }
 
 watchEffect((onCleanup) => {
@@ -151,7 +150,7 @@ watchEffect((onCleanup) => {
   console.log('searchSmall:', searchSmall.value)
   if (!tl) return
   if (searchSmall.value) {
-    (async () => {
+    ;(async () => {
       await tl.play()
       chartGraph = graph({
         echartRef,
@@ -180,41 +179,39 @@ watchEffect((onCleanup) => {
     chartGraph_1?.stop()
     chartGraph_1 = null
   }
-});
+})
 </script>
 
 <template>
   <div
-      class="flex items-center justify-end w-fit p-4 mx-auto"
-      ref="searchWrapperEl"
+    class="flex items-center justify-end w-fit p-4 mx-auto"
+    ref="searchWrapperEl"
   >
     <input
-        size="8"
-        maxlength="8"
-        placeholder="glove ID"
-        autofocus
-        class="border border-black-300 rounded-full shadow"
-        ref="searchEl"
-        v-model="deviceIdRaw"
-        @keydown.enter="
+      size="8"
+      maxlength="8"
+      placeholder="glove ID"
+      autofocus
+      class="border border-black-300 rounded-full shadow"
+      ref="searchEl"
+      v-model="deviceIdRaw"
+      @keydown.enter="
         deviceIdRaw_IsLegit && ($event.target as HTMLInputElement).blur()
       "
-        @focus="deviceId = undefined"
-        @blur="checkLogin()"
+      @focus="deviceId = undefined"
+      @blur="checkLogin()"
     />
   </div>
   <div
-      class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
-      ref="chartsEl"
+    class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
+    ref="chartsEl"
   >
     <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef"></div>
     <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef_1"></div>
-    <img :src="chartImg" class="w-full"/>
-    <img :src="chartImg" class="w-full"/>
-    <img :src="chartImg" class="w-full col-span-2"/>
-    <img :src="chartImg" class="w-full"/>
-    <img :src="chartImg" class="w-full"/>
+    <img :src="chartImg" class="w-full" />
+    <img :src="chartImg" class="w-full" />
+    <img :src="chartImg" class="w-full col-span-2" />
+    <img :src="chartImg" class="w-full" />
+    <img :src="chartImg" class="w-full" />
   </div>
 </template>
-
-
