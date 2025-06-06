@@ -42,7 +42,7 @@ void fft::invert_signal(Network *net) {
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
 	Serial.print(F(">Inv:"));
 	Serial.println(invSample);
-	servo.write(map(invSample * 10, -3, 3, 0, 180));
+	servo.write(map(invSample * 10000, -3000, 3000, 0, 180));
 	net->push(invSample);
 }
 
