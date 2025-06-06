@@ -38,5 +38,5 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full col-span-2 aspect-[2/1]" ref="container"></div>
+  <div ref="container"></div>
 </template>

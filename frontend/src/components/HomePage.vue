@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, type Ref, ref, watchEffect } from 'vue'
-import * as echarts from 'echarts'
+import { computed, ref } from 'vue'
 import chartImg from '../assets/chart.gif'
 import EChart from './EChart.vue'
 
@@ -11,12 +10,6 @@ const legitIds = new Set([
   'testUser',
   '12345678',
 ])
-
-const chartsEl = ref<HTMLInputElement>()
-const echartRef = ref<HTMLDivElement | null>(null)
-const echartRef_1 = ref<HTMLDivElement | null>(null)
-let chartGraph: ReturnType<typeof graph> | null = null
-let chartGraph_1: ReturnType<typeof graph> | null = null
 
 const isLegitDevId = (devId: string | undefined) => {
   if (devId === undefined) return false
@@ -29,96 +22,6 @@ const lastInputDevId = ref<string>()
 const lastLegitDevId = computed<string | undefined>((previous) =>
   isLegitDevId(lastInputDevId.value) ? lastInputDevId.value : previous,
 )
-
-const lineChartOptions = {
-  xAxis: { type: 'category' },
-  yAxis: { type: 'value', scale: true },
-  series: [{ type: 'line', smooth: true }],
-}
-
-function graph({
-  echartRef,
-  url = '/api/devices/123/amplitude/live/',
-  chartOptions,
-  maxPoints = 50,
-}: {
-  echartRef: Ref<HTMLDivElement | null>
-  url?: string
-  chartOptions: any
-  maxPoints?: number
-}) {
-  let source: EventSource | null = null
-  let chartInstance: echarts.ECharts | null = null
-
-  const x_data: string[] = []
-  const y_data: number[] = []
-
-  function start() {
-    if (!echartRef.value) return
-    chartInstance = echarts.init(echartRef.value)
-    chartInstance.setOption(chartOptions)
-    source = new EventSource(url)
-    source.onerror = (err) => {
-      console.error('EventSource failed', err)
-    }
-    source.onmessage = (event) => {
-      const numbers = JSON.parse(event.data)
-      for (const point of numbers.data) {
-        const timeLabel = new Date(point.time).toLocaleTimeString()
-        x_data.push(timeLabel)
-        y_data.push(point.value)
-      }
-      while (x_data.length > maxPoints) x_data.shift()
-      while (y_data.length > maxPoints) y_data.shift()
-
-      chartInstance?.setOption({
-        xAxis: { data: x_data },
-        series: [{ data: y_data }],
-      })
-    }
-  }
-
-  function stop() {
-    if (chartInstance) chartInstance.dispose()
-    if (source) source.close()
-  }
-
-  onBeforeUnmount(stop)
-
-  return { start, stop }
-}
-
-watchEffect((onCleanup) => {
-  if (isLegitDevId(lastInputDevId.value)) {
-    requestAnimationFrame(() => {
-      chartGraph = graph({
-        echartRef,
-        url: `/api/devices/${lastLegitDevId.value}/amplitude/live/`,
-        chartOptions: lineChartOptions,
-        maxPoints: 50,
-      })
-      chartGraph.start()
-      chartGraph_1 = graph({
-        echartRef: echartRef_1,
-        url: `/api/devices/${lastLegitDevId.value}/frequency/live/`,
-        chartOptions: lineChartOptions,
-        maxPoints: 50,
-      })
-      chartGraph_1.start()
-      onCleanup(() => {
-        chartGraph?.stop()
-        chartGraph = null
-        chartGraph_1?.stop()
-        chartGraph_1 = null
-      })
-    })
-  } else {
-    chartGraph?.stop()
-    chartGraph = null
-    chartGraph_1?.stop()
-    chartGraph_1 = null
-  }
-})
 </script>
 
 <template>
@@ -151,15 +54,22 @@ watchEffect((onCleanup) => {
     />
   </div>
   <div
+    v-if="isLegitDevId(lastInputDevId)"
     class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
-    :class="{ hidden: !isLegitDevId(lastInputDevId) }"
-    ref="chartsEl"
   >
-    <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef"></div>
-    <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef_1"></div>
     <EChart
-      v-if="isLegitDevId(lastInputDevId)"
-      url="/api/devices/12345678/phase/live/"
+      class="w-full col-span-2 aspect-[2/1]"
+      :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
+      :maxPoints="50"
+      :options="{
+        xAxis: { type: 'time', scale: true },
+        yAxis: { type: 'value', scale: true },
+        series: { type: 'line', smooth: true },
+      }"
+    />
+    <EChart
+      class="w-full col-span-2 aspect-[2/1]"
+      :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
       :maxPoints="50"
       :options="{
         xAxis: { type: 'time', scale: true },
