@@ -141,14 +141,14 @@ watchEffect((onCleanup) => {
       await tl.play()
       chartGraph = graph({
         echartRef,
-        url: '/api/devices/123/amplitude/live/',
+        url: `/api/devices/${lastLegitDevId.value}/amplitude/live/`,
         chartOptions: lineChartOptions,
         maxPoints: 50,
       })
       chartGraph.start()
       chartGraph_1 = graph({
         echartRef: echartRef_1,
-        url: '/api/devices/123/amplitude/live/',
+        url: `/api/devices/${lastLegitDevId.value}/frequency/live/`,
         chartOptions: lineChartOptions,
         maxPoints: 50,
       })
