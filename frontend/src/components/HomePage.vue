@@ -133,8 +133,6 @@ function graph({
 
 watchEffect((onCleanup) => {
   const tl = timeline.value
-  console.log('watchEffect triggered — lastLegitDevId:', lastLegitDevId.value)
-  console.log('isLegitDevId:', isLegitDevId(lastInputDevId.value))
   if (!tl) return
   if (isLegitDevId(lastInputDevId.value)) {
     ;(async () => {
