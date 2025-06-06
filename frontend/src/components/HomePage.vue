@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, type Ref, ref, watchEffect } from 'vue'
-import gsap from 'gsap'
 import * as echarts from 'echarts'
 import chartImg from '../assets/chart.gif'
 
@@ -12,8 +11,6 @@ const legitIds = new Set([
   '12345678',
 ])
 
-const searchEl = ref<HTMLInputElement>()
-const searchWrapperEl = ref<HTMLInputElement>()
 const chartsEl = ref<HTMLInputElement>()
 const echartRef = ref<HTMLDivElement | null>(null)
 const echartRef_1 = ref<HTMLDivElement | null>(null)
@@ -31,47 +28,6 @@ const lastInputDevId = ref<string>()
 const lastLegitDevId = computed<string | undefined>((previous) =>
   isLegitDevId(lastInputDevId.value) ? lastInputDevId.value : previous,
 )
-
-const timeline = computed(() => {
-  const search = searchEl.value
-  const searchWrapper = searchWrapperEl.value
-  const charts = chartsEl.value
-  if (!search || !searchWrapper || !charts) return
-  return gsap
-    .timeline({
-      paused: true,
-      defaults: { duration: 0.25, ease: 'power4' },
-    })
-    .fromTo(
-      searchWrapper,
-      {
-        minWidth: 0,
-        minHeight: '100vh',
-      },
-      {
-        minWidth: '100vw',
-        minHeight: 0,
-      },
-    )
-    .fromTo(
-      search,
-      {
-        paddingBlock: '1em',
-        paddingInline: '8em',
-      },
-      {
-        paddingBlock: 0,
-        paddingInline: '1em',
-      },
-      '<',
-    )
-    .fromTo(
-      charts,
-      { autoAlpha: 0, display: 'none' },
-      { autoAlpha: 1, display: 'grid' },
-      '<',
-    )
-})
 
 const lineChartOptions = {
   xAxis: { type: 'category' },
@@ -132,11 +88,8 @@ function graph({
 }
 
 watchEffect((onCleanup) => {
-  const tl = timeline.value
-  if (!tl) return
   if (isLegitDevId(lastInputDevId.value)) {
-    ;(async () => {
-      await tl.play()
+    requestAnimationFrame(() => {
       chartGraph = graph({
         echartRef,
         url: `/api/devices/${lastLegitDevId.value}/amplitude/live/`,
@@ -151,15 +104,14 @@ watchEffect((onCleanup) => {
         maxPoints: 50,
       })
       chartGraph_1.start()
-    })()
-    onCleanup(() => {
-      chartGraph?.stop()
-      chartGraph = null
-      chartGraph_1?.stop()
-      chartGraph_1 = null
+      onCleanup(() => {
+        chartGraph?.stop()
+        chartGraph = null
+        chartGraph_1?.stop()
+        chartGraph_1 = null
+      })
     })
   } else {
-    tl.reverse()
     chartGraph?.stop()
     chartGraph = null
     chartGraph_1?.stop()
@@ -170,16 +122,25 @@ watchEffect((onCleanup) => {
 
 <template>
   <div
-    class="flex items-center justify-end w-fit p-4 mx-auto"
-    ref="searchWrapperEl"
+    class="flex items-center justify-end w-fit p-4 mx-auto transition-all"
+    :class="{
+      'min-h-1': isLegitDevId(lastInputDevId),
+      'min-h-screen': !isLegitDevId(lastInputDevId),
+      'min-w-1': !isLegitDevId(lastInputDevId),
+      'min-w-screen': isLegitDevId(lastInputDevId),
+    }"
   >
     <input
       size="8"
       maxlength="8"
       placeholder="glove ID"
       autofocus
-      class="border border-black-300 rounded-full shadow"
-      ref="searchEl"
+      class="border border-black-300 rounded-full shadow transition-all"
+      :class="{
+        'px-32': !isLegitDevId(lastInputDevId),
+        'py-4': !isLegitDevId(lastInputDevId),
+        'px-4': isLegitDevId(lastInputDevId),
+      }"
       v-model="devIdModel"
       @keydown.enter="
         isLegitDevId(devIdModel) && ($event.target as HTMLInputElement).blur()
@@ -190,6 +151,7 @@ watchEffect((onCleanup) => {
   </div>
   <div
     class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
+    :class="{ hidden: !isLegitDevId(lastInputDevId) }"
     ref="chartsEl"
   >
     <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef"></div>
