@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, type Ref, ref, watchEffect } from 'vue'
 import * as echarts from 'echarts'
 import chartImg from '../assets/chart.gif'
+import EChart from './EChart.vue'
 
 const legitIds = new Set([
   'admin',
@@ -156,6 +157,16 @@ watchEffect((onCleanup) => {
   >
     <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef"></div>
     <div class="w-full col-span-2 aspect-[2/1]" ref="echartRef_1"></div>
+    <EChart
+      v-if="isLegitDevId(lastInputDevId)"
+      url="/api/devices/12345678/phase/live/"
+      :maxPoints="50"
+      :options="{
+        xAxis: { type: 'time', scale: true },
+        yAxis: { type: 'value', scale: true },
+        series: { type: 'line', smooth: true },
+      }"
+    />
     <img :src="chartImg" class="w-full" />
     <img :src="chartImg" class="w-full" />
     <img :src="chartImg" class="w-full col-span-2" />
