@@ -165,6 +165,7 @@ watchEffect((onCleanup) => {
       chartGraph_1 = null
     })
   } else {
+    tl.reverse()
     chartGraph?.stop()
     chartGraph = null
     chartGraph_1?.stop()
