@@ -12,12 +12,12 @@ def index(request):
     return HttpResponse("hi world")
 
 
-def amplitude(request, device_id):
+def property(request, device_id, property):
     values = [randint(0, 100) for _ in range(500)]
     return JsonResponse({"values": values})
 
 
-async def amplitude_live(request, device_id):
+async def property_live(request, device_id, property):
     async def response():
         nc = await nats.connect(
             servers="tls://jarkad.net.eu.org",
@@ -35,7 +35,7 @@ async def amplitude_live(request, device_id):
                 datetime.now(timezone.utc) - timedelta(minutes=2)
             ).isoformat(),
         )
-        sub = await js.pull_subscribe(f"devices.{device_id}.amplitude", config=conf)
+        sub = await js.pull_subscribe(f"devices.{device_id}.{property}", config=conf)
 
         try:
             while msgs := await sub.fetch(batch=1024):
