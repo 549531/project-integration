@@ -24,8 +24,10 @@ void fft::update(Network *net) {
 	vImag[idx] = 0.0f;
 
 	// send values one by one
-	Serial.print(F(">Test sin:"));
+	Serial.print(F(">Amplitude:"));
 	Serial.println(vReal[idx]);
+	net->push(vReal[idx], "devices/12345678/input");
+
 
 	if (fDrive > 0.0f) invert_signal(net);
 
@@ -43,7 +45,7 @@ void fft::invert_signal(Network *net) {
 	Serial.print(F(">Inv:"));
 	Serial.println(invSample);
 	servo.write(map(invSample * 10000, -3000, 3000, 0, 180));
-	net->push(invSample);
+	net->push(invSample, "devices/12345678/inverted");
 }
 
 void fft::compute_fft() {
