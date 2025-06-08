@@ -14,9 +14,15 @@ let chart: echarts.ECharts | undefined
 let sse: EventSource | undefined
 let data: { name: string; value: [string, number] }[] = []
 
+function onResize() {
+  chart?.resize()
+}
+
 onMounted(() => {
   chart = echarts.init(containerRef.value)
   chart?.setOption(options)
+
+  window.addEventListener('resize', onResize)
 })
 
 watchEffect(() => {
@@ -34,6 +40,7 @@ watchEffect(() => {
 
 onUnmounted(() => {
   sse?.close()
+  window.removeEventListener('resize', onResize)
 })
 </script>
 
