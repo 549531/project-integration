@@ -25,7 +25,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
 
 <template>
   <div class="py-2 absolute w-full flex items-center justify-center" v-if="!isLegitDevId(lastInputDevId)">
-    <img style="height: 40vh; border-radius: 16px; border: 2px solid navy" src="../assets/anton.png" alt="Gandon">
+    <img style="height: 40vh; border-radius: 16px; border: 2px solid white" src="../assets/anton.png" alt="Gandon">
   </div>
   <div class="flex column items-center justify-end w-fit p-4 mx-auto transition-all" :class="{
     'min-h-1': isLegitDevId(lastInputDevId),
@@ -34,7 +34,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     'min-w-screen': isLegitDevId(lastInputDevId),
   }">
     <input maxlength="8" placeholder="Enter your glove ID" autofocus
-      class="border text-center border-black-300 rounded-full shadow transition-all" :class="{
+      class="border text-center outline-1 outline-slate-300 rounded-full shadow transition-all" :class="{
         'px-16': !isLegitDevId(lastInputDevId),
         'py-4': !isLegitDevId(lastInputDevId),
         'px-4': isLegitDevId(lastInputDevId),
@@ -46,14 +46,56 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto">
     <EChart class="w-full col-span-1 aspect-[2/1]" :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
       :maxPoints="50" :options="{
-        xAxis: { type: 'time', scale: true },
-        yAxis: { type: 'value', scale: true },
+        darkMode: true,
+        color: '#00bcff',
+
+        textStyle: {
+          color: '#fff'
+        },
+        title: {
+          text: 'Input tremor signal',
+          left: 'center',
+          textStyle: {
+            color: '#fff'
+          },
+        },
+        xAxis: {
+          type: 'time', scale: true
+        },
+        yAxis: {
+          type: 'value',
+          scale: true,
+          splitLine: {
+            lineStyle: {
+              color: '#364459'
+            }
+          }
+        },
         series: { type: 'line', smooth: true },
       }" />
     <EChart class="w-full col-span-1 aspect-[2/1]" :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
       :maxPoints="50" :options="{
+        darkMode: true,
+        color: '#00bcff',
+        textStyle: {
+          color: '#fff'
+        },
+        title: {
+          text: 'Countered tremor signal',
+          left: 'center', textStyle: {
+            color: '#fff'
+          },
+        },
         xAxis: { type: 'time', scale: true },
-        yAxis: { type: 'value', scale: true },
+        yAxis: {
+          type: 'value',
+          scale: true,
+          splitLine: {
+            lineStyle: {
+              color: '#364459'
+            }
+          }
+        },
         series: { type: 'line', smooth: true },
       }" />
 
