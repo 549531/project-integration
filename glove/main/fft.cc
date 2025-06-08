@@ -28,7 +28,6 @@ void fft::update(Network *net) {
 	Serial.println(vReal[idx]);
 	net->push(vReal[idx], "devices/12345678/input");
 
-
 	if (fDrive > 0.0f) invert_signal(net);
 
 	if (++idx >= SAMPLES) {

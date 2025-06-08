@@ -24,66 +24,96 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
 </script>
 
 <template>
-  <div class="py-2 absolute w-full flex items-center justify-center" v-if="!isLegitDevId(lastInputDevId)">
-    <img style="height: 40vh; border-radius: 16px; border: 2px solid white" src="../assets/anton.png" alt="Gandon">
+  <div
+    class="py-2 absolute w-full flex items-center justify-center"
+    v-if="!isLegitDevId(lastInputDevId)"
+  >
+    <img
+      style="height: 40vh; border-radius: 16px; border: 2px solid white"
+      src="../assets/anton.png"
+      alt="Gandon"
+    />
   </div>
-  <div class="flex column items-center justify-end w-fit p-4 mx-auto transition-all" :class="{
-    'min-h-1': isLegitDevId(lastInputDevId),
-    'min-h-screen': !isLegitDevId(lastInputDevId),
-    'min-w-1': !isLegitDevId(lastInputDevId),
-    'min-w-screen': isLegitDevId(lastInputDevId),
-  }">
-    <input maxlength="8" placeholder="Enter your glove ID" autofocus
-      class="border text-center outline-1 outline-slate-300 rounded-full shadow transition-all" :class="{
+  <div
+    class="flex column items-center justify-end w-fit p-4 mx-auto transition-all"
+    :class="{
+      'min-h-1': isLegitDevId(lastInputDevId),
+      'min-h-screen': !isLegitDevId(lastInputDevId),
+      'min-w-1': !isLegitDevId(lastInputDevId),
+      'min-w-screen': isLegitDevId(lastInputDevId),
+    }"
+  >
+    <input
+      maxlength="8"
+      placeholder="Enter your glove ID"
+      autofocus
+      class="border text-center outline-1 outline-slate-300 rounded-full shadow transition-all"
+      :class="{
         'px-16': !isLegitDevId(lastInputDevId),
         'py-4': !isLegitDevId(lastInputDevId),
         'px-4': isLegitDevId(lastInputDevId),
-      }" v-model="devIdModel" @keydown.enter="
+      }"
+      v-model="devIdModel"
+      @keydown.enter="
         isLegitDevId(devIdModel) && ($event.target as HTMLInputElement).blur()
-        " @focus="lastInputDevId = undefined" @blur="lastInputDevId = devIdModel" />
+      "
+      @focus="lastInputDevId = undefined"
+      @blur="lastInputDevId = devIdModel"
+    />
   </div>
-  <div v-if="isLegitDevId(lastInputDevId)"
-    class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto">
-    <EChart class="w-full col-span-1 aspect-[2/1]" :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
-      :maxPoints="50" :options="{
+  <div
+    v-if="isLegitDevId(lastInputDevId)"
+    class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
+  >
+    <EChart
+      class="w-full col-span-1 aspect-[2/1]"
+      :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
+      :maxPoints="50"
+      :options="{
         darkMode: true,
         color: '#00bcff',
 
         textStyle: {
-          color: '#fff'
+          color: '#fff',
         },
         title: {
           text: 'Input tremor signal',
           left: 'center',
           textStyle: {
-            color: '#fff'
+            color: '#fff',
           },
         },
         xAxis: {
-          type: 'time', scale: true
+          type: 'time',
+          scale: true,
         },
         yAxis: {
           type: 'value',
           scale: true,
           splitLine: {
             lineStyle: {
-              color: '#364459'
-            }
-          }
+              color: '#364459',
+            },
+          },
         },
         series: { type: 'line', smooth: true },
-      }" />
-    <EChart class="w-full col-span-1 aspect-[2/1]" :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
-      :maxPoints="50" :options="{
+      }"
+    />
+    <EChart
+      class="w-full col-span-1 aspect-[2/1]"
+      :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
+      :maxPoints="50"
+      :options="{
         darkMode: true,
         color: '#00bcff',
         textStyle: {
-          color: '#fff'
+          color: '#fff',
         },
         title: {
           text: 'Countered tremor signal',
-          left: 'center', textStyle: {
-            color: '#fff'
+          left: 'center',
+          textStyle: {
+            color: '#fff',
           },
         },
         xAxis: { type: 'time', scale: true },
@@ -92,12 +122,12 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
           scale: true,
           splitLine: {
             lineStyle: {
-              color: '#364459'
-            }
-          }
+              color: '#364459',
+            },
+          },
         },
         series: { type: 'line', smooth: true },
-      }" />
-
+      }"
+    />
   </div>
 </template>
