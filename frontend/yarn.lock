@@ -1519,13 +1519,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gsap@npm:^3.13.0":
-  version: 3.13.0
-  resolution: "gsap@npm:3.13.0"
-  checksum: 10c0/a42dd2e02467a4abe96409aaf6cd0e5d697c72e05ec13c18c2271330493983aa63cc717c9dd0740fda2f884d0f56c7b98fc18b13500f0c1da94864985840da7c
-  languageName: node
-  linkType: hard
-
 "has-symbols@npm:^1.0.3, has-symbols@npm:^1.1.0":
   version: 1.1.0
   resolution: "has-symbols@npm:1.1.0"
@@ -2074,7 +2067,6 @@ __metadata:
     "@vue/language-server": "npm:^2.2.10"
     "@vue/tsconfig": "npm:^0.7.0"
     echarts: "npm:^5.6.0"
-    gsap: "npm:^3.13.0"
     tailwindcss: "npm:^4.1.5"
     typescript: "npm:~5.7.2"
     typescript-language-server: "npm:^4.3.4"
