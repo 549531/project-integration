@@ -11,15 +11,12 @@ fft::fft() : fftEngine(vReal, vImag, SAMPLES, FS) {
 }
 
 /*----------------------------------------------------*/
-/* 1. Being called 128 times every second             */
+/* 1. Being called 64 times every second              */
 /*----------------------------------------------------*/
 void fft::update(Network *net) {
 	sensors_event_t a, g, t;
 	mpu_get(&a, &g, &t);
 
-	// static float phase = 0.0f;            // keeps running
-	// phase += TWO_PI * 2.0f / FS;          // Δφ = 2 Hz / 128 Hz
-	// if (phase > TWO_PI) phase -= TWO_PI;  // wrap once per cycle
 	vReal[idx] = g.gyro.x;  // deg/s
 	vImag[idx] = 0.0f;
 
@@ -43,9 +40,15 @@ void fft::invert_signal(Network *net) {
 	float invSample = ampDrive * sinf(phaseAcc + phaseInv);
 	Serial.print(F(">Inv:"));
 	Serial.println(invSample);
-	const float range = 1.5;
+	const float range = 2;
 	const int digits = 1000;
-	servo.write(map(invSample * digits, -range*digits, range*digits, 0, 180));
+
+	auto angle =
+	    map(invSample * digits, -range * digits, range * digits, 0, 180);
+
+	servo.write(angle);
+	Serial.print(F(">Angle:"));
+	Serial.println(angle);
 	net->push(invSample, "devices/12345678/inverted");
 }
 
@@ -67,14 +70,4 @@ void fft::compute_fft() {
 	float phasePeak = atan2f(vImag[peakIdx], vReal[peakIdx]);  // rad
 	phaseInv = phasePeak - PI / 2;                             // +180°
 	ampDrive = 4.0f * sqrtf(peakMag2) / SAMPLES;               // ≃ RMS
-
-	// fftEngine.complexToMagnitude();
-
-	// Serial.print(">FFT:");
-	// for (uint8_t k = 0; k < SAMPLES / 2; ++k) {
-	// 	float freq = k * FS / SAMPLES;
-	// 	Serial.printf("%u:%.3f%s", (unsigned)freq, vReal[k],
-	// 		      (k < SAMPLES / 2 - 1) ? ";" : "");
-	// }
-	// Serial.print("|xy,clr\n");
 }
