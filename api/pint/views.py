@@ -43,7 +43,7 @@ async def property_live(request, device_id, property):
                     "data": [
                         {
                             "time": int(msg.metadata.timestamp.timestamp() * 1000),
-                            "value": int(msg.data),
+                            "value": float(msg.data),
                         }
                         for msg in msgs
                     ]
@@ -89,7 +89,7 @@ async def csv_export(request, device_id, property):
             while msgs := await sub.fetch(batch=1024, timeout=0.1):
                 for msg in msgs:
                     time = msg.metadata.timestamp.strftime("%F %T")
-                    value = int(msg.data)
+                    value = float(msg.data)
                     yield f"{time},{value}\n"
         except TimeoutError:
             pass
