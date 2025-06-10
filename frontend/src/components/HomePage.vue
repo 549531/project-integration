@@ -47,7 +47,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       maxlength="8"
       placeholder="Enter your glove ID"
       autofocus
-      class="border-[#2a3c70]/80 text-center outline-1 outline-slate-300-[#2a3c70] rounded-full shadow-xl shadow-blue-500/50 transition-all"
+      class="border-[#2a3c70]/80 text-center outline-1 outline-slate-300-[#2a3c70] rounded-full shadow-xl shadow-blue-500/35 transition-all"
       :class="{
         'px-16': !isLegitDevId(lastInputDevId),
         'py-4': !isLegitDevId(lastInputDevId),
@@ -63,12 +63,12 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
   </div>
   <div
     v-if="isLegitDevId(lastInputDevId)"
-     class="grid grid-flow-col grid-cols-2 grid-cols-2 gap-2 p-2 container mx-auto"
+     class="grid grid-flow-col grid-cols-2 gap-2 p-2 container mx-auto"
   >
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/input/live/`"
-      :maxPoints="250"
+      :maxPoints="20"
       :options="{
         darkMode: true,
         color: '#00bcff',
@@ -110,7 +110,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/inverted/live/`"
-      :maxPoints="250"
+      :maxPoints="20"
       :options="{
         darkMode: true,
         color: '#00bcff',
@@ -144,7 +144,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       }"
     />
     <EChart
-      class="w-full row-span-2 aspect-[1/1]"
+      class="w-full row-span-2 aspect-[1/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/input/hourly/`"
       :maxPoints="1"
       :options="{
@@ -188,7 +188,10 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
             { name: '23' },
           ],
         },
-        series: { type: 'radar' },
+        series: [{
+          type: 'radar',
+          areaStyle: { color: 'rgba(0, 188, 255, 0.35)' }
+        }],
       }"
     />
   </div>
