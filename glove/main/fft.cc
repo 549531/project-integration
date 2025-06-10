@@ -45,7 +45,8 @@ void fft::invert_signal(Network *net) {
 	Serial.println(invSample);
 	const float range = 1.5;
 	const int digits = 1000;
-	servo.write(map(invSample * digits, -range*digits, range*digits, 0, 180));
+	servo.write(
+	    map(invSample * digits, -range * digits, range * digits, 0, 180));
 	net->push(invSample, "devices/12345678/inverted");
 }
 
