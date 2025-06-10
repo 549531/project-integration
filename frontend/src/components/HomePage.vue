@@ -63,7 +63,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
   </div>
   <div
     v-if="isLegitDevId(lastInputDevId)"
-    class="grid grid-flow-col grid-rows-2 grid-cols-2 gap-2 p-2 container mx-auto"
+     class="grid grid-flow-col grid-cols-2 grid-cols-2 gap-2 p-2 container mx-auto"
   >
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
@@ -141,6 +141,54 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
             smooth: true,
           },
         ],
+      }"
+    />
+    <EChart
+      class="w-full row-span-2 aspect-[1/1]"
+      :url="`/api/devices/${lastLegitDevId}/input/hourly/`"
+      :maxPoints="1"
+      :options="{
+        darkMode: true,
+        color: '#00bcff',
+        textStyle: {
+          color: '#fff',
+        },
+        title: {
+          text: 'Average hourly amplitude',
+          left: 'center',
+          textStyle: {
+            color: '#fff',
+          },
+        },
+        radar: {
+          indicator: [
+            { name: '00' },
+            { name: '01' },
+            { name: '02' },
+            { name: '03' },
+            { name: '04' },
+            { name: '05' },
+            { name: '06' },
+            { name: '07' },
+            { name: '08' },
+            { name: '09' },
+            { name: '10' },
+            { name: '11' },
+            { name: '12' },
+            { name: '13' },
+            { name: '14' },
+            { name: '15' },
+            { name: '16' },
+            { name: '17' },
+            { name: '18' },
+            { name: '19' },
+            { name: '20' },
+            { name: '21' },
+            { name: '22' },
+            { name: '23' },
+          ],
+        },
+        series: { type: 'radar' },
       }"
     />
   </div>
