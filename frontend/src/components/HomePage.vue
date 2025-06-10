@@ -66,7 +66,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     class="grid grid-flow-col grid-cols-2 gap-2 p-2 container mx-auto"
   >
     <EChart
-      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
+      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/20 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/input/live/`"
       :maxPoints="250"
       :options="{
@@ -110,7 +110,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       }"
     />
     <EChart
-      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
+      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/20 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/inverted/live/`"
       :maxPoints="250"
       :options="{
@@ -148,7 +148,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       }"
     />
     <EChart
-      class="w-full row-span-2 aspect-[1/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
+      class="size-full row-span-2 aspect-[1/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/20 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/input/hourly/`"
       :maxPoints="1"
       :options="{
