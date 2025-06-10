@@ -27,13 +27,20 @@ async def property_live(request, device_id, property):
         )
         js = nc.jetstream()
 
+        opts = {}
+        try:
+            opts["deliver_policy"] = nats.js.api.DeliverPolicy.BY_START_SEQUENCE
+            opts["opt_start_seq"] = int(request.headers["last-event-id"])
+        except:
+            opts["deliver_policy"] = nats.js.api.DeliverPolicy.BY_START_TIME
+            opts["opt_start_time"] = (
+                datetime.now(timezone.utc) - timedelta(minutes=2)
+            ).isoformat()
+
         conf = nats.js.api.ConsumerConfig(
             mem_storage=True,
             ack_policy=nats.js.api.AckPolicy.NONE,
-            deliver_policy=nats.js.api.DeliverPolicy.BY_START_TIME,
-            opt_start_time=(
-                datetime.now(timezone.utc) - timedelta(minutes=2)
-            ).isoformat(),
+            **opts,
         )
         sub = await js.pull_subscribe(f"devices.{device_id}.{property}", config=conf)
 
@@ -51,6 +58,10 @@ async def property_live(request, device_id, property):
                         for msg in msgs
                     ]
                 }
+                if msgs:
+                    yield "id: "
+                    yield msgs[-1].metadata.sequence.stream
+                    yield "\n"
                 yield "data: "
                 yield json.dumps(res)
                 yield "\n\n"
