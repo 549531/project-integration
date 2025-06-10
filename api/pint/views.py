@@ -42,8 +42,11 @@ async def property_live(request, device_id, property):
                 res = {
                     "data": [
                         {
-                            "time": int(msg.metadata.timestamp.timestamp() * 1000),
-                            "value": float(msg.data),
+                            "name": int(msg.metadata.timestamp.timestamp() * 1000),
+                            "value": [
+                                int(msg.metadata.timestamp.timestamp() * 1000),
+                                float(msg.data),
+                            ],
                         }
                         for msg in msgs
                     ]
