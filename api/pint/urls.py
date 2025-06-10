@@ -14,4 +14,9 @@ urlpatterns = [
         views.csv_export,
         name="csv_export",
     ),
+    path(
+        "devices/<int:device_id>/<str:property>/hourly/",
+        views.hourly_statistics,
+        name="hourly_statistics",
+    ),
 ]
