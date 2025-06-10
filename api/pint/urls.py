@@ -9,4 +9,9 @@ urlpatterns = [
         views.property_live,
         name="property_live",
     ),
+    path(
+        "devices/<int:device_id>/<str:property>/csv/",
+        views.csv_export,
+        name="csv_export",
+    ),
 ]
