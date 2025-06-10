@@ -67,8 +67,8 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
   >
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
-      :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
-      :maxPoints="50"
+      :url="`/api/devices/${lastLegitDevId}/input/live/`"
+      :maxPoints="250"
       :options="{
         darkMode: true,
         color: '#00bcff',
@@ -109,8 +109,8 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     />
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
-      :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
-      :maxPoints="50"
+      :url="`/api/devices/${lastLegitDevId}/inverted/live/`"
+      :maxPoints="250"
       :options="{
         darkMode: true,
         color: '#00bcff',
