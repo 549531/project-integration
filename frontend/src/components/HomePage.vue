@@ -63,7 +63,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
   </div>
   <div
     v-if="isLegitDevId(lastInputDevId)"
-     class="grid grid-flow-col grid-cols-2 grid-cols-2 gap-2 p-2 container mx-auto"
+    class="grid grid-flow-col grid-cols-2 grid-cols-2 gap-2 p-2 container mx-auto"
   >
     <EChart
       class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
