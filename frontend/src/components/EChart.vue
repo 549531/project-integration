@@ -34,10 +34,7 @@ watchEffect(() => {
       data.push(point)
     }
     while (data.length > maxPoints) data.shift()
-    chart?.setOption(
-      { series: { data: data } },
-      {  lazyUpdate: true },
-    )
+    chart?.setOption({ series: { data: data } }, { lazyUpdate: true })
   }
 })
 
