@@ -64,3 +64,43 @@ async def property_live(request, device_id, property):
         content_type="text/event-stream",
         headers={"Cache-Control": "no-cache"},
     )
+
+
+async def csv_export(request, device_id, property):
+    async def response():
+        nc = await nats.connect(
+            servers="tls://jarkad.net.eu.org",
+            tls_handshake_first=True,
+            user="pint",
+            password="pint",
+        )
+        js = nc.jetstream()
+
+        conf = nats.js.api.ConsumerConfig(
+            mem_storage=True,
+            ack_policy=nats.js.api.AckPolicy.NONE,
+            deliver_policy=nats.js.api.DeliverPolicy.BY_START_TIME,
+            opt_start_time=(datetime.now(timezone.utc) - timedelta(days=7)).isoformat(),
+        )
+        sub = await js.pull_subscribe(f"devices.{device_id}.{property}", config=conf)
+
+        yield "time,value\n"
+        try:
+            while msgs := await sub.fetch(batch=1024, timeout=0.1):
+                for msg in msgs:
+                    time = msg.metadata.timestamp.strftime("%F %T")
+                    value = int(msg.data)
+                    yield f"{time},{value}\n"
+        except TimeoutError:
+            pass
+        except asyncio.CancelledError:
+            pass
+
+        await sub.unsubscribe()
+        await nc.close()
+
+    return StreamingHttpResponse(
+        response(),
+        content_type="text/csv",
+        headers={"Cache-Control": "no-cache"},
+    )
