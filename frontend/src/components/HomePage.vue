@@ -31,7 +31,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
     <img
       style="height: 40vh; border-radius: 16px; border: 2px solid white"
       src="../assets/anton.png"
-      alt="Gandon"
+      alt="Lega"
     />
   </div>
   <div
@@ -47,7 +47,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       maxlength="8"
       placeholder="Enter your glove ID"
       autofocus
-      class="border text-center outline-1 outline-slate-300 rounded-full shadow transition-all"
+      class="border-[#2a3c70]/80 text-center outline-1 outline-slate-300-[#2a3c70] rounded-full shadow-xl shadow-blue-500/50 transition-all"
       :class="{
         'px-16': !isLegitDevId(lastInputDevId),
         'py-4': !isLegitDevId(lastInputDevId),
@@ -63,10 +63,10 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
   </div>
   <div
     v-if="isLegitDevId(lastInputDevId)"
-    class="grid grid-flow-row auto-rows-auto grid-cols-2 gap-2 p-2 container mx-auto"
+    class="grid grid-flow-col grid-rows-2 grid-cols-2 gap-2 p-2 container mx-auto"
   >
     <EChart
-      class="w-full col-span-1 aspect-[2/1]"
+      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/amplitude/live/`"
       :maxPoints="50"
       :options="{
@@ -86,6 +86,8 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
         xAxis: {
           type: 'time',
           scale: true,
+          boundaryGap: false,
+          areaStyle: {},
         },
         yAxis: {
           type: 'value',
@@ -96,11 +98,17 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
             },
           },
         },
-        series: { type: 'line', smooth: true },
+        series: [
+          {
+            type: 'line',
+            areaStyle: { color: 'rgba(0, 188, 255, 0.35)' },
+            smooth: true,
+          },
+        ],
       }"
     />
     <EChart
-      class="w-full col-span-1 aspect-[2/1]"
+      class="w-full aspect-[2/1] bg-blend-color rounded-2xl shadow-xl shadow-blue-500/50 p-6 border border-[#2a3c70]/80"
       :url="`/api/devices/${lastLegitDevId}/frequency/live/`"
       :maxPoints="50"
       :options="{
@@ -126,7 +134,13 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
             },
           },
         },
-        series: { type: 'line', smooth: true },
+        series: [
+          {
+            areaStyle: { color: 'rgba(0, 188, 255, 0.35)' },
+            type: 'line',
+            smooth: true,
+          },
+        ],
       }"
     />
   </div>
