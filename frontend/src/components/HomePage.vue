@@ -70,6 +70,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       :url="`/api/devices/${lastLegitDevId}/input/live/`"
       :maxPoints="20"
       :options="{
+        animation: false,
         darkMode: true,
         color: '#00bcff',
 
@@ -101,6 +102,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
         series: [
           {
             type: 'line',
+            symbol: 'none',
             areaStyle: { color: 'rgba(0, 188, 255, 0.35)' },
             smooth: true,
           },
@@ -112,6 +114,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
       :url="`/api/devices/${lastLegitDevId}/inverted/live/`"
       :maxPoints="20"
       :options="{
+        animation: false,
         darkMode: true,
         color: '#00bcff',
         textStyle: {
@@ -137,6 +140,7 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
         series: [
           {
             areaStyle: { color: 'rgba(0, 188, 255, 0.35)' },
+            symbol: 'none',
             type: 'line',
             smooth: true,
           },
