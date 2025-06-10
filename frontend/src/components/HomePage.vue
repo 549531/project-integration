@@ -192,10 +192,12 @@ const lastLegitDevId = computed<string | undefined>((previous) =>
             { name: '23' },
           ],
         },
-        series: [{
-          type: 'radar',
-          areaStyle: { color: 'rgba(0, 188, 255, 0.35)' }
-        }],
+        series: [
+          {
+            type: 'radar',
+            areaStyle: { color: 'rgba(0, 188, 255, 0.35)' },
+          },
+        ],
       }"
     />
   </div>
