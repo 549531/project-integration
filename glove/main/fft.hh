@@ -10,9 +10,8 @@
 
 struct fft {
 	// Constants
-	static constexpr uint16_t SAMPLES = 128;  // FFT length (power-of-2)
-	static constexpr float FS = 128.0f;       // sample rate  [Hz]
-	static constexpr uint32_t SAMPLE_PERIOD_US = 1000000 / FS;
+	static constexpr uint16_t SAMPLES = 32;  // FFT length (power-of-2)
+	static constexpr float FS = 64.0f;     // sample rate  [Hz]
 
 	// Object data
 	float vReal[SAMPLES];
