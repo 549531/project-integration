@@ -31,7 +31,7 @@ watchEffect(() => {
   sse.onmessage = (event) => {
     const numbers = JSON.parse(event.data)
     for (const point of numbers.data) {
-      data.push({ name: point.time, value: [point.time, point.value] })
+      data.push(point)
     }
     while (data.length > maxPoints) data.shift()
     chart?.setOption(
