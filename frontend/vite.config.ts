@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': 'https://project-integration.foo.ng',
+      '/api': 'http://127.0.0.1:2948',
     },
   },
   plugins: [vue(), tailwindcss()],
