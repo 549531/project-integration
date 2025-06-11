@@ -144,7 +144,7 @@ async def hourly_statistics(request, device_id, property):
         except:
             opts["deliver_policy"] = nats.js.api.DeliverPolicy.BY_START_TIME
             opts["opt_start_time"] = (
-                datetime.now(timezone.utc) - timedelta(days=30)
+                datetime.now(timezone.utc) - timedelta(days=7)
             ).isoformat()
 
         conf = nats.js.api.ConsumerConfig(
