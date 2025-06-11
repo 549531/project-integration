@@ -130,7 +130,7 @@ async def hourly_statistics(request, device_id, property):
         )
         js = nc.jetstream()
 
-        size = 60
+        size = 24
         sum = [0] * size
         count = [0] * size
         res = [0] * size
@@ -157,7 +157,7 @@ async def hourly_statistics(request, device_id, property):
         try:
             while msgs := await sub.fetch(batch=1024):
                 for msg in msgs:
-                    time = msg.metadata.timestamp.second
+                    time = msg.metadata.timestamp.hour
                     value = float(msg.data)
                     sum[time] += value
                     count[time] += 1
