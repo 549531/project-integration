@@ -36,7 +36,7 @@ jobs:
       - name: platformio build
         run: cd glove && pio run
       - name: Upload the artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: glove
           path: glove/.pio/build/*/*.elf
