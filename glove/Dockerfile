@@ -1,6 +1,9 @@
 FROM python:slim AS build
 WORKDIR /src
 
+# Install Git, required by PlatformIO
+RUN apt-get update && apt-get install -y git
+
 # Install PlatformIO Core
 RUN pip install --no-cache-dir platformio
 
