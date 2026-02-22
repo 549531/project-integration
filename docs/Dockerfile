@@ -5,7 +5,7 @@ WORKDIR /src
 RUN \
 	apt-get update &&\
 	apt-get install -y --no-install-recommends \
-		default-jre-headless &&\
+		default-jre &&\
 	rm -rf /var/lib/apt/lists/*
 
 ADD https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar /opt/plantuml.jar
