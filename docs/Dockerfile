@@ -3,8 +3,8 @@ WORKDIR /src
 
 # Install PlantUML
 RUN \
-	apt update &&\
-	apt install -y --no-install-recommends \
+	apt-get update &&\
+	apt-get install -y --no-install-recommends \
 		curl default-jre-headless &&\
 	rm -rf /var/lib/apt/lists/*
 
