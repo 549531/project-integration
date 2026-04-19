@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
   api:
     needs: skip_check
     if: needs.skip_check.outputs.should_skip != 'true' && !fromJSON(needs.skip_check.outputs.paths_result).api.should_skip
