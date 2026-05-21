@@ -3,12 +3,12 @@ WORKDIR /src
 
 # Install PlantUML
 RUN \
-	apt update &&\
-	apt install -y --no-install-recommends \
-		curl default-jre-headless &&\
+	apt-get update &&\
+	apt-get install -y --no-install-recommends \
+		default-jre &&\
 	rm -rf /var/lib/apt/lists/*
 
-RUN curl -fSLo /opt/plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+ADD https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar /opt/plantuml.jar
 COPY .docker/bin/plantuml /usr/bin/plantuml
 
 # Setup venv
