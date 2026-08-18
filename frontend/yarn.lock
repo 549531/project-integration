@@ -2123,7 +2123,7 @@ __metadata:
     echarts: "npm:^5.6.0"
     tailwindcss: "npm:^4.1.5"
     typescript: "npm:~5.7.2"
-    typescript-language-server: "npm:^4.3.4"
+    typescript-language-server: "npm:^5.3.0"
     vite: "npm:^7.1.12"
     vue: "npm:^3.5.13"
     vue-tsc: "npm:^2.2.8"
@@ -2508,12 +2508,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-language-server@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "typescript-language-server@npm:4.3.4"
+"typescript-language-server@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "typescript-language-server@npm:5.3.0"
   bin:
     typescript-language-server: lib/cli.mjs
-  checksum: 10c0/c6e24585d234bdfac593f0d93e0f644976807aef6defde87e3b7a22241be5b9289b1803fb1da7d318aef352190d6ed292b030c00f4caa6618fd8470fe3539dd4
+  checksum: 10c0/d37d795f20849f5788134c18b00ad724ba325536d7f9fd308fc7ee97ee10a4ca383b7e35791b4e526beaa6a286e8255e42c807c3f20e884d71f21d5fe19807d5
   languageName: node
   linkType: hard
 
