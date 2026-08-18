@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.2",
-    "@vue/language-server": "^2.2.10",
+    "@vue/language-server": "^3.3.10",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.7.2",
     "typescript-language-server": "^4.3.4",
