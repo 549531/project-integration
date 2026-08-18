@@ -1,10 +1,10 @@
 #include "network.hh"
 
-Network::Network(const char* wifi_ssid, const char* wifi_pwd,
-		 const char* mqtt_host,
+Network::Network(const char *wifi_ssid, const char *wifi_pwd,
+		 const char *mqtt_host,
 		 uint16_t mqtt_port,  // 1883 for plain
-		 const char* mqtt_user, const char* mqtt_pass,
-		 const char* ca_cert_pem)
+		 const char *mqtt_user, const char *mqtt_pass,
+		 const char *ca_cert_pem)
     : _ssid(wifi_ssid),
       _pwd(wifi_pwd),
       _host(mqtt_host),
@@ -41,7 +41,7 @@ void Network::loop() {
 	_mqtt.loop();
 }
 
-bool Network::push(float value, char* topic) {
+bool Network::push(float value, char *topic) {
 	char payload[8];
 	dtostrf(value, 0, 2, payload);                  // "123.45"
 	bool ok = _mqtt.publish(topic, payload, true);  // retained

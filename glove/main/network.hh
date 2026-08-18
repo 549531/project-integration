@@ -14,12 +14,12 @@
  */
 class Network {
        public:
-	Network(const char* wifi_ssid, const char* wifi_pwd,
-		const char* mqtt_host,
+	Network(const char *wifi_ssid, const char *wifi_pwd,
+		const char *mqtt_host,
 		uint16_t mqtt_port = 8883,  // 1883 for plain
-		const char* mqtt_user = nullptr,
-		const char* mqtt_pass = nullptr,
-		const char* ca_cert_pem = nullptr);
+		const char *mqtt_user = nullptr,
+		const char *mqtt_pass = nullptr,
+		const char *ca_cert_pem = nullptr);
 
 	/* call once from setup() */
 	void begin();
@@ -28,20 +28,20 @@ class Network {
 	void loop();
 
 	/* publish one float (returns true on success) */
-	bool push(float value, char* topic);
+	bool push(float value, char *topic);
 
        private:
 	void _reconnect();
 
 	/* data
 	 * ------------------------------------------------------------------*/
-	const char* _ssid;
-	const char* _pwd;
-	const char* _host;
+	const char *_ssid;
+	const char *_pwd;
+	const char *_host;
 	uint16_t _port;
-	const char* _user;
-	const char* _pass;
-	const char* _ca;
+	const char *_user;
+	const char *_pass;
+	const char *_ca;
 
 	WiFiClient _client;
 	PubSubClient _mqtt;

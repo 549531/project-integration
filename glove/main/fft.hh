@@ -30,12 +30,12 @@ struct fft {
 	fft();
 
 	// Public API
-	void invert_signal(Network* net);
+	void invert_signal(Network *net);
 	void compute_fft();
-	void update(Network* net);
+	void update(Network *net);
 };
 
 struct TimerCtx {
-	Network* net;
-	fft* fft_obj;
+	Network *net;
+	fft *fft_obj;
 };
